@@ -1,0 +1,44 @@
+import { createVuetify } from 'vuetify'
+import { ko, en, zhHans, zhHant, de, es, ja, fr, ru, pt, nl } from 'vuetify/locale'
+import { VFileUpload } from 'vuetify/labs/VFileUpload'
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.min.css'
+
+import colors from 'vuetify/lib/util/colors.mjs'
+
+export default createVuetify({
+  locale: {
+    messages: { ko, en, zhHans, zhHant, de, es, ja, fr, ru, pt, nl },
+    locale: 'en',
+    fallback: 'en'
+  },
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi
+    }
+  },
+  components: {
+    VFileUpload
+  },
+  theme: {
+    themes: {
+      light: {
+        dark: false,
+        colors: {
+          primary: colors.blue.darken3,
+          secondary: colors.indigo.darken3
+        }
+      },
+      dark: {
+        dark: true,
+        colors: {
+          primary: colors.indigo.darken2,
+          secondary: colors.indigo.darken4
+        }
+      }
+    }
+  }
+})

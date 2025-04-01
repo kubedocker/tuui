@@ -1,0 +1,55 @@
+{
+  "desc": {},
+  "title": {
+    "main": "MCP 界面",
+    "chat": "聊天界面",
+    "setting": "设置界面",
+    "error": "未知错误"
+  },
+  "menu": {
+    "change-theme": "改变主题",
+    "change-language": "改变语言",
+    "increase-count": "计数 1 个增量",
+    "documentation": "文档",
+    "github": "源代码",
+    "open-file": "打开文本文件"
+  },
+  "locale": {
+    "title": "语言设置"
+  },
+  "chat": {
+    "new": "新对话",
+    "reg": "重新生成"
+  },
+  "setting": {
+    "title-api": "API 配置",
+    "title-model": "模型参数",
+    "name": "名称",
+    "apikey": "API 密钥",
+    "url": "URL",
+    "path": "Path",
+    "model": "Model",
+    "advanced": "Advanced",
+    "method": "HTTP Method",
+    "stream": "Stream",
+    "mcp": "MCP",
+    "maxTokensPrefix": "Max Tokens Prefix",
+    "temperature": "Temperature",
+    "topP": "Top P",
+    "contentType": "Content Type",
+    "authPrefix": "Auth Prefix",
+    "configFile": "Config File"
+  },
+  "validation": {
+    "invalid-number": "必须为有效数字",
+    "number-range": "数值必须在 {min} 到 {max} 之间"
+  },
+  "snackbar": {
+    "addnew": "已添加新会话",
+    "addfail": "已处于最新会话",
+    "stopped": "停止生成",
+    "parseStreamFail": "无法解析数据流",
+    "parseConfigFail": "无法解析配置文件",
+    "copied": "已复制到剪切板"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "desc": {},
+  "title": {
+    "main": "MCP Screen",
+    "chat": "Chat Screen",
+    "setting": "Setting Screen",
+    "error": "Unknown Error"
+  },
+  "menu": {
+    "change-theme": "Change Theme",
+    "change-language": "Change Language",
+    "increase-count": "Count 1 increment",
+    "documentation": "Documentation",
+    "github": "Source Code",
+    "open-file": "Open a text file"
+  },
+  "locale": {
+    "title": "Language"
+  },
+  "chat": {
+    "new": "New Conversation",
+    "reg": "Regeneration"
+  },
+  "setting": {
+    "title-api": "API Setting",
+    "title-model": "Model Configuration",
+    "name": "Name",
+    "apikey": "API Key",
+    "url": "URL",
+    "path": "Path",
+    "model": "Model",
+    "advanced": "Advanced",
+    "method": "HTTP Method",
+    "stream": "Stream",
+    "mcp": "MCP",
+    "maxTokensPrefix": "Max Tokens Prefix",
+    "temperature": "Temperature",
+    "topP": "Top P",
+    "contentType": "Content Type",
+    "authPrefix": "Auth Prefix",
+    "configFile": "Config File"
+  },
+  "validation": {
+    "invalid-number": "Should be a valid number",
+    "number-range": "Value range should between {min} and {max}"
+  },
+  "snackbar": {
+    "addnew": "Added new session.",
+    "addfail": "Already in a fresh session.",
+    "stopped": "Generating stopped.",
+    "parseStreamFail": "Cannot read the stream.",
+    "parseConfigFail": "Cannot parse the config file.",
+    "copied": "Copied to clipboard."
+  }
+}
