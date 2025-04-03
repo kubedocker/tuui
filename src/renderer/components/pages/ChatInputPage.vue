@@ -25,7 +25,7 @@ const chatbotStore = useChatbotStore()
   <v-row>
     <v-select  max-width="400px"
     class = "pt-3 pb-0"
-  label="Select" hide-details
+  :label="$t('chat.select')" hide-details
   density="compact" variant="outlined"
   :items="chatbotStore.chatbots.map((chatbot, index) => ({ ...chatbot, index }))"
   item-title="name"

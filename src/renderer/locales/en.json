@@ -19,7 +19,8 @@
   },
   "chat": {
     "new": "New Conversation",
-    "reg": "Regeneration"
+    "reg": "Regeneration",
+    "select": "Select Model"
   },
   "prompt": {
     "title": "Server Prompt",
