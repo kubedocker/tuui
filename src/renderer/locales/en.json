@@ -21,6 +21,10 @@
     "new": "New Conversation",
     "reg": "Regeneration"
   },
+  "prompt": {
+    "title": "Server Prompt",
+    "get": "Get"
+  },
   "setting": {
     "title-api": "API Setting",
     "title-model": "Model Configuration",

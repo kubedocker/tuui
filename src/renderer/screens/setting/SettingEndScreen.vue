@@ -45,6 +45,7 @@ watch(configFile, (newValue, oldValue) => {
       </v-btn>
 
       <v-btn icon="mdi-refresh" @click="chatbotStore.resetState"></v-btn>
+      <v-btn icon="mdi-plus" @click="chatbotStore.addChatbot"></v-btn>
     </v-btn-group>
   </v-container>
 </template>

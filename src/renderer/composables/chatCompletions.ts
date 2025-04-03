@@ -17,7 +17,7 @@ export const createCompletion = async (rawconversation) => {
 
   const allChatbotStore = useChatbotStore()
 
-  const chatbotStore = allChatbotStore.chatbots[allChatbotStore.currentChatbotId]
+  const chatbotStore = allChatbotStore.chatbots[allChatbotStore.selectedChatbotId]
 
   console.log(chatbotStore)
 

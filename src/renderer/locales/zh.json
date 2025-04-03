@@ -21,6 +21,10 @@
     "new": "新对话",
     "reg": "重新生成"
   },
+  "prompt": {
+    "title": "服务端提示模板",
+    "get": "获取"
+  },
   "setting": {
     "title-api": "API 配置",
     "title-model": "模型参数",

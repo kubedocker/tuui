@@ -1,18 +1,20 @@
 import { defineStore } from 'pinia'
 import { ChatbotConfig, CHATBOT_DEFAULTS } from '@/renderer/types'
+import { v4 as uuidv4 } from 'uuid'
 
 export interface ChatbotStoreState {
   chatbots: ChatbotConfig[]
-  currentChatbotId: number // array index
+  currentChatbotId: number // chatbots array index, being modified
+  selectedChatbotId: number // chatbots array index, being selected
 }
 
 export const useChatbotStore = defineStore('chatbotStore', {
   state: (): ChatbotStoreState => ({
     chatbots: [
-      { ...CHATBOT_DEFAULTS, name: 'Default 1' },
-      { ...CHATBOT_DEFAULTS, name: 'Default 2' }
+      { ...CHATBOT_DEFAULTS, name: 'Chatbot Default' },
     ],
-    currentChatbotId: 0 // points to first chatbot by default
+    currentChatbotId: 0, // points to first chatbot by default
+    selectedChatbotId: 0
   }),
 
   persist: {
@@ -23,22 +25,6 @@ export const useChatbotStore = defineStore('chatbotStore', {
     resetState() {
       this.$reset()
     },
-    // addChatbot(config?: Partial<ChatbotConfig>) {
-    //   if (!config?.name) {
-    //     config = {
-    //       ...config,
-    //       name: `Chatbot ${this.chatbots.length + 1}`
-    //     }
-    //   }
-
-    //   const newChatbot: ChatbotConfig = {
-    //     ...CHATBOT_DEFAULTS,
-    //     ...config
-    //   }
-
-    //   this.chatbots.push(newChatbot)
-    //   this.currentChatbotId = this.chatbots.length - 1
-    // },
 
     updateChatbotConfig(index: number, patch: Partial<ChatbotConfig>) {
       if (index < 0 || index >= this.chatbots.length) {
@@ -46,6 +32,10 @@ export const useChatbotStore = defineStore('chatbotStore', {
         return
       }
       Object.assign(this.chatbots[index], patch)
+    },
+
+    addChatbot() {
+      this.chatbots.push({ ...CHATBOT_DEFAULTS, name: 'Chatbot ' + uuidv4() })
     },
 
     removeChatbot(index: number) {

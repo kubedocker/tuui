@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { usePromptStore } from '@/renderer/store/prompt'
 import { useMessageStore } from '@/renderer/store/message'
 import { useLayoutStore } from '@/renderer/store/layout'
+import { usePromptStore } from '@/renderer/store/prompt'
 import { useRouter } from 'vue-router';
 
 const messageStore = useMessageStore()
@@ -58,7 +58,7 @@ icon="mdi-lead-pencil" size="small" text="Read" border flat
   <v-dialog v-model="promptStore.promptSheet" class="dialog-card">
     <v-card
 prepend-icon="mdi-account-cog-outline"
-      :title="$t('$vuetify.dataIterator.p.sheet') + ' - ' + promptStore.promptSelect.title"
+      :title="$t('prompt.title') + ' - ' + promptStore.promptSelect.title"
       :subtitle="promptStore.promptSelect.name">
       <v-divider></v-divider>
       <v-card-text>
@@ -73,7 +73,7 @@ v-for="argument in promptStore.promptSelect.arguments" :key="argument.name" v-mo
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="pt-0" variant="flat" color="primary" @click="handleApplyPrompt">Get</v-btn>
+          <v-btn class="pt-0" variant="flat" color="primary" @click="handleApplyPrompt"> {{ $t('prompt.get') }}</v-btn>
         </v-card-actions>
       </v-card-text>
     </v-card>

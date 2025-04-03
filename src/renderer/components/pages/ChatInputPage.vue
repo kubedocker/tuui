@@ -1,6 +1,8 @@
 <script setup lang="tsx">
 import { useMessageStore } from '@/renderer/store/message'
+import { useChatbotStore } from '@/renderer/store/chatbot'
 const messageStore = useMessageStore()
+const chatbotStore = useChatbotStore()
 </script>
 
 <template>
@@ -21,6 +23,15 @@ const messageStore = useMessageStore()
     ></v-textarea>
   </v-row>
   <v-row>
+    <v-select  max-width="400px"
+    class = "pt-3 pb-0"
+  label="Select" hide-details
+  density="compact" variant="outlined"
+  :items="chatbotStore.chatbots.map((chatbot, index) => ({ ...chatbot, index }))"
+  item-title="name"
+  item-value="index"
+  v-model="chatbotStore.selectedChatbotId"
+></v-select>
     <v-spacer></v-spacer>
     <div class="pt-3">
       <v-btn

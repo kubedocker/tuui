@@ -25,7 +25,6 @@ const chatbotStore = useChatbotStore()
       :key="index"
       class="custom-chip ml-2"
       :value="index"
-      :text="item.name"
       filter
       filter-icon="mdi-lead-pencil"
       label
@@ -33,7 +32,9 @@ const chatbotStore = useChatbotStore()
       close-icon="mdi-delete"
       @click="console.log(chatbotStore.currentChatbotId)"
       @click:close="chatbotStore.removeChatbot(index)"
-    ></v-chip>
+    >
+    <span class="text-truncate" style="max-width: 180px;">{{ item.name }}</span>
+  </v-chip>
     <!-- draggable -->
   </v-chip-group>
 </template>
