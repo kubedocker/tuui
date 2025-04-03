@@ -44,15 +44,19 @@ export const useChatbotStore = defineStore('chatbotStore', {
       }
     },
 
-    updateStoreFromJSON(json: ChatbotStoreState) {
+    updateStoreFromJSON(json: {chatbots: ChatbotConfig[] | ChatbotConfig}) {
       this.$reset()
       this.chatbots = []
       if (json.chatbots) {
-        json.chatbots.forEach((newChatbot, index) => {
-          this.chatbots.push({ ...CHATBOT_DEFAULTS, ...newChatbot })
-        })
+        if (Array.isArray(json.chatbots)) {
+          json.chatbots.forEach((newChatbot, index) => {
+            this.chatbots.push({ ...CHATBOT_DEFAULTS, ...newChatbot })
+          })
+        } else {
+          // Handle case when chatbots is a single object
+          this.chatbots.push({ ...CHATBOT_DEFAULTS, ...json.chatbots })
+        }
       }
-      // this.$state = json
     },
 
     // Helper method to find chatbot by name
