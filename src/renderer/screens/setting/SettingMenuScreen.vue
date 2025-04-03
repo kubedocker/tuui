@@ -33,8 +33,8 @@ const chatbotStore = useChatbotStore()
       @click="console.log(chatbotStore.currentChatbotId)"
       @click:close="chatbotStore.removeChatbot(index)"
     >
-    <span class="text-truncate" style="max-width: 180px;">{{ item.name }}</span>
-  </v-chip>
+      <span class="text-truncate" style="max-width: 180px">{{ item.name }}</span>
+    </v-chip>
     <!-- draggable -->
   </v-chip-group>
 </template>

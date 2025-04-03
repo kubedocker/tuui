@@ -23,15 +23,18 @@ const chatbotStore = useChatbotStore()
     ></v-textarea>
   </v-row>
   <v-row>
-    <v-select  max-width="400px"
-    class = "pt-3 pb-0"
-  :label="$t('chat.select')" hide-details
-  density="compact" variant="outlined"
-  :items="chatbotStore.chatbots.map((chatbot, index) => ({ ...chatbot, index }))"
-  item-title="name"
-  item-value="index"
-  v-model="chatbotStore.selectedChatbotId"
-></v-select>
+    <v-select
+      v-model="chatbotStore.selectedChatbotId"
+      max-width="400px"
+      class="pt-3 pb-0"
+      :label="$t('chat.select')"
+      hide-details
+      density="compact"
+      variant="outlined"
+      :items="chatbotStore.chatbots.map((chatbot, index) => ({ ...chatbot, index }))"
+      item-title="name"
+      item-value="index"
+    ></v-select>
     <v-spacer></v-spacer>
     <div class="pt-3">
       <v-btn

@@ -10,9 +10,7 @@ export interface ChatbotStoreState {
 
 export const useChatbotStore = defineStore('chatbotStore', {
   state: (): ChatbotStoreState => ({
-    chatbots: [
-      { ...CHATBOT_DEFAULTS, name: 'Chatbot Default' },
-    ],
+    chatbots: [{ ...CHATBOT_DEFAULTS, name: 'Chatbot Default' }],
     currentChatbotId: 0, // points to first chatbot by default
     selectedChatbotId: 0
   }),

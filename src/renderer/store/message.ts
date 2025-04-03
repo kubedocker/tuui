@@ -66,9 +66,9 @@ export const useMessageStore = defineStore('messageStore', {
         this.conversation.push({
           content: imageBase64
             ? [
-              { type: 'image_url', image_url: { url: imageBase64 } },
-              { type: 'text', text: this.userMessage }
-            ]
+                { type: 'image_url', image_url: { url: imageBase64 } },
+                { type: 'text', text: this.userMessage }
+              ]
             : this.userMessage,
           role: 'user'
         })
