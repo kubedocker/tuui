@@ -96,7 +96,7 @@ const groupMessages = computed<Group[]>(() => {
             @delete-messages="handleDeleteMessages"
           >
             <template #default="{ showmodify }">
-              <v-card-text v-if="Array.isArray(group.message!.content)" class="md-preview">
+              <v-card-text v-if="Array.isArray(group.message!.content)" class="md-preview pt-1">
                 <div v-for="(item, index) in group.message!.content" :key="index">
                   <img-dialog v-if="item.type === 'image_url'" :src="item.image_url.url" />
                   <v-textarea
@@ -110,7 +110,6 @@ const groupMessages = computed<Group[]>(() => {
                     rows="1"
                     :readonly="!showmodify"
                   />
-                  // counter could be false as vuetify
                 </div>
               </v-card-text>
               <v-card-text v-else class="md-preview pt-1">

@@ -66,25 +66,27 @@ export const useMessageStore = defineStore('messageStore', {
         this.conversation.push({
           content: imageBase64
             ? [
-                { type: 'image_url', image_url: { url: imageBase64 } },
-                { type: 'text', text: this.userMessage }
-              ]
+              { type: 'image_url', image_url: { url: imageBase64 } },
+              { type: 'text', text: this.userMessage }
+            ]
             : this.userMessage,
           role: 'user'
         })
 
         if (this.conversation.length === 1) {
-          const historyStore = useHistoryStore()
-          historyStore.init(this.conversation)
+          this.syncHistory()
         }
 
         this.startInference()
       }
     },
-    applyPrompt: async function (fetchedPrompt) {
-      const messages = await fetchedPrompt
-      console.log(messages)
+    syncHistory: function () {
+      const historyStore = useHistoryStore()
+      historyStore.init(this.conversation)
+    },
+    applyPrompt: function (messages) {
       this.conversation = messages
+      this.syncHistory()
     },
     startInference: async function () {
       this.clear()
