@@ -42,7 +42,7 @@ export const usePromptStore = defineStore('promptStore', {
     fetchPrompts: async function () {
       const mcpStore = useMcpStore()
       const mcpServers = mcpStore.getSelected
-      const prompts = await mcpServers.methods.list()
+      const prompts = await mcpServers.method.list()
       return prompts.prompts.map((prompt) => ({
         title: mcpServers.server,
         ...prompt

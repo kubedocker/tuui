@@ -9,6 +9,10 @@ import ChatHistoryScreen from '@/renderer/screens/chat/ChatHistoryScreen.vue'
 import ChatInputScreen from '@/renderer/screens/chat/ChatInputScreen.vue'
 import ChatEndScreen from '@/renderer/screens/chat/ChatEndScreen.vue'
 
+import AgentCentralStage from '@/renderer/screens/agent/AgentCentralStage.vue'
+import AgentSideDock from '@/renderer/screens/agent/AgentSideDock.vue'
+import AgentSideDrawer from '@/renderer/screens/agent/AgentSideDrawer.vue'
+
 import SettingMainScreen from '@/renderer/screens/setting/SettingScreen.vue'
 import SettingDrawerScreen from '@/renderer/screens/setting/SettingMenuScreen.vue'
 import SettingConfigScreen from '@/renderer/screens/setting/SettingEndScreen.vue'
@@ -31,6 +35,12 @@ export const ChatScreen: ScreenType = {
   sideDrawer: ChatHistoryScreen,
   sideDock: ChatEndScreen,
   bottomConsole: ChatInputScreen
+}
+
+export const AgentScreen: ScreenType = {
+  centralStage: AgentCentralStage,
+  sideDrawer: AgentSideDrawer,
+  sideDock: AgentSideDock
 }
 
 export const SettingScreen: ScreenType = {

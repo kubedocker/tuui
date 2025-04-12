@@ -60,7 +60,7 @@ const copyToClipboard = async (msg: Message) => {
     }
 
     await navigator.clipboard.writeText(textToCopy)
-    snackbarStore.showSuccessMessage('$snackbar.copied')
+    snackbarStore.showSuccessMessage('snackbar.copied')
   } catch (err) {
     snackbarStore.showErrorMessage(err instanceof Error ? err.message : String(err))
   }

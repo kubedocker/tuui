@@ -1,19 +1,45 @@
 import { useMessageStore } from '@/renderer/store/message'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
-
-import { useMcpStore } from '@/renderer/store/mcp'
+// import { useMcpStore } from '@/renderer/store/mcp'
+import { useAgentStore } from '@/renderer/store/agent'
 
 // import { ChatbotConfig } from '@/renderer/types'
 
-const promptMessage = (conversation) => {
-  return [...conversation]
+const isObjectEmpty = (obj?: Record<string, unknown>): boolean => {
+  return !!obj && Object.keys(obj).length === 0
+}
+
+export const isEmptyTools = (tools: any): boolean => {
+  if (!tools) {
+    return true
+  } else if (Array.isArray(tools)) {
+    if (tools.length === 0) {
+      return true
+    } else {
+      return isObjectEmpty(tools[0])
+    }
+  } else {
+    return true
+  }
+}
+
+const promptMessage = (conversation: string) => {
+  const agentStore = useAgentStore()
+  const systemPrompt = agentStore.getPrompt()
+
+  if (systemPrompt) {
+    return [{ content: systemPrompt, role: "system" }, ...conversation]
+  } else {
+    return [...conversation]
+  }
 }
 
 export const createCompletion = async (rawconversation) => {
   const snackbarStore = useSnackbarStore()
   const messageStore = useMessageStore()
-  const mcpStore = useMcpStore()
+  // const mcpStore = useMcpStore()
+  const agentStore = useAgentStore()
 
   const allChatbotStore = useChatbotStore()
 
@@ -66,7 +92,10 @@ export const createCompletion = async (rawconversation) => {
     }
 
     if (chatbotStore.mcp) {
-      body.tools = await mcpStore.listTools()
+      const tools = await agentStore.getTools()
+      if (tools && tools.length > 0) {
+        body.tools = tools
+      }
     }
 
     const request = {
@@ -99,7 +128,7 @@ export const createCompletion = async (rawconversation) => {
     // Create a reader
     const reader = completion.body?.getReader()
     if (!reader) {
-      snackbarStore.showErrorMessage('$snackbar.parseStreamFail')
+      snackbarStore.showErrorMessage('snackbar.parseStreamFail')
     }
 
     // Add the bot message

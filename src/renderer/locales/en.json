@@ -3,6 +3,7 @@
   "title": {
     "main": "MCP Screen",
     "chat": "Chat Screen",
+    "agent": "Agent Screen",
     "setting": "Setting Screen",
     "error": "Unknown Error"
   },
@@ -20,11 +21,21 @@
   "chat": {
     "new": "New Conversation",
     "reg": "Regeneration",
-    "select": "Select Model"
+    "select-model": "Select Model",
+    "select-agent": "Select Agent"
   },
   "prompt": {
     "title": "Server Prompt",
     "get": "Get"
+  },
+  "agent": {
+    "config": "Agent Config",
+    "prompt": "System Prompt",
+    "tools": "List of tools",
+    "all": "All tools",
+    "selected": "Selected Tools",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "setting": {
     "title-api": "API Setting",

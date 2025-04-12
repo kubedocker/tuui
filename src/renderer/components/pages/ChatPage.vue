@@ -2,6 +2,7 @@
 import { computed, reactive } from 'vue'
 import ImgDialog from '../common/ImgDialog.vue'
 import ChatCard from '../common/ChatCard.vue'
+import { isEmptyTools } from '@/renderer/composables/chatCompletions'
 import { MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 
@@ -49,10 +50,7 @@ const groupMessages = computed<Group[]>(() => {
         group: 'user',
         message
       })
-    } else if (
-      message.role === 'assistant' &&
-      (!message.tool_calls || message.tool_calls.length === 0)
-    ) {
+    } else if (message.role === 'assistant' && isEmptyTools(message.tool_calls)) {
       groups.push({
         index,
         group: 'assistant',
@@ -77,6 +75,7 @@ const groupMessages = computed<Group[]>(() => {
       }
     }
   })
+  console.log(groups)
   return groups
 })
 </script>

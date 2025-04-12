@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useMcpStore } from '@/renderer/store/mcp'
 import { useHistoryStore } from '@/renderer/store/history'
-import { createCompletion } from '@/renderer/composables/chatCompletions'
+import { createCompletion, isEmptyTools } from '@/renderer/composables/chatCompletions'
 
 export const useMessageStore = defineStore('messageStore', {
   // TODO: fix any to type
@@ -17,16 +17,16 @@ export const useMessageStore = defineStore('messageStore', {
     init() {
       const snackbarStore = useSnackbarStore()
       if (this.conversation.length === 0) {
-        snackbarStore.showWarningMessage('$snackbar.addfail')
+        snackbarStore.showWarningMessage('snackbar.addfail')
       } else {
         this.conversation = []
-        snackbarStore.showSuccessMessage('$snackbar.addnew')
+        snackbarStore.showSuccessMessage('snackbar.addnew')
       }
     },
     stop() {
       const snackbarStore = useSnackbarStore()
       this.generating = false
-      snackbarStore.showInfoMessage('$snackbar.stopped')
+      snackbarStore.showInfoMessage('snackbar.stopped')
     },
     clear() {
       this.userMessage = ''
@@ -99,7 +99,7 @@ export const useMessageStore = defineStore('messageStore', {
       if (!last || !last.tool_calls) {
         return
       }
-      if (last.tool_calls.length === 0) {
+      if (isEmptyTools(last.tool_calls)) {
         delete last.tool_calls
         //   return
       } else {

@@ -1,6 +1,7 @@
 import { createVuetify } from 'vuetify'
 import { ko, en, zhHans, zhHant, de, es, ja, fr, ru, pt, nl } from 'vuetify/locale'
 import { VFileUpload } from 'vuetify/labs/VFileUpload'
+import { VTreeview } from 'vuetify/labs/VTreeview'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import 'vuetify/styles'
 import '@mdi/font/css/materialdesignicons.min.css'
@@ -21,7 +22,8 @@ export default createVuetify({
     }
   },
   components: {
-    VFileUpload
+    VFileUpload,
+    VTreeview
   },
   theme: {
     themes: {

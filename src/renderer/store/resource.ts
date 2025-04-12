@@ -16,7 +16,10 @@ export const useResourceStore = defineStore('resourceStore', {
     loadTemplates: function () {
       this.loadingTemplates = true
       const mcpStore = useMcpStore()
-      const resourceFunction = mcpStore.getServerFunction('resources', 'templates/list')
+      const resourceFunction = mcpStore.getServerFunction({
+        primitiveName: 'resources',
+        methodName: 'templates/list'
+      })
       try {
         resourceFunction().then((result) => {
           console.log(result)
@@ -31,7 +34,10 @@ export const useResourceStore = defineStore('resourceStore', {
     loadResources: function () {
       this.loadingResources = true
       const mcpStore = useMcpStore()
-      const resourceFunction = mcpStore.getServerFunction('resources', 'list')
+      const resourceFunction = mcpStore.getServerFunction({
+        primitiveName: 'resources',
+        methodName: 'list'
+      })
       try {
         resourceFunction().then((result) => {
           console.log(result)

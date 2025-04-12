@@ -1,4 +1,4 @@
-import { McpScreen, ChatScreen, SettingScreen } from '@/renderer/screens'
+import { McpScreen, ChatScreen, AgentScreen, SettingScreen } from '@/renderer/screens'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 export default createRouter({
@@ -16,6 +16,13 @@ export default createRouter({
       components: ChatScreen,
       meta: {
         titleKey: 'title.chat'
+      }
+    },
+    {
+      path: '/agent',
+      components: AgentScreen,
+      meta: {
+        titleKey: 'title.agent'
       }
     },
     {

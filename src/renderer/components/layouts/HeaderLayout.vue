@@ -1,6 +1,7 @@
 <script setup lang="tsx">
-import { useRouter } from 'vue-router'
-import { useLayoutStore } from '@/renderer/store/layout'
+import { watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useLayoutStore, getScreenFromPath } from '@/renderer/store/layout'
 // import { useTheme } from 'vuetify'
 import LocaleBtn from '@/renderer/components/common/LocaleBtn.vue'
 import { useRouteFeatures } from '@/renderer/composables/useRouteFeatures'
@@ -15,11 +16,16 @@ const mcpStore = useMcpStore()
 const layoutStore = useLayoutStore()
 
 const router = useRouter()
+const route = useRoute()
 // const theme = useTheme()
 
 const handleRoute = (path: string): void => {
   router.push(path)
 }
+
+watchEffect(() => {
+  layoutStore.screen = getScreenFromPath(route.path)
+})
 
 // const handleChangeTheme = (): void => {
 //   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
@@ -46,7 +52,11 @@ const handleRoute = (path: string): void => {
       </v-btn>
 
       <v-btn data-testid="btn-menu-chat" @click="handleRoute('/chat')">
-        <v-icon>mdi-text-account</v-icon>
+        <v-icon>mdi-comment-text-outline</v-icon>
+      </v-btn>
+
+      <v-btn data-testid="btn-menu-agent" @click="handleRoute('/agent')">
+        <v-icon>mdi-account-multiple</v-icon>
       </v-btn>
 
       <v-btn data-testid="btn-menu-setting" @click="handleRoute('/setting')">

@@ -44,7 +44,7 @@ export const useChatbotStore = defineStore('chatbotStore', {
       }
     },
 
-    updateStoreFromJSON(json: {chatbots: ChatbotConfig[] | ChatbotConfig}) {
+    updateStoreFromJSON(json: { chatbots: ChatbotConfig[] | ChatbotConfig }) {
       this.$reset()
       this.chatbots = []
       if (json.chatbots) {

@@ -19,7 +19,7 @@ watch(configFile, (newValue, oldValue) => {
         chatbotStore.updateStoreFromJSON(json.chatbotStore)
       } catch {
         console.log('parse——error')
-        // snackbarStore.showErrorMessage('$snackbar.parseConfigFail')
+        // snackbarStore.showErrorMessage('snackbar.parseConfigFail')
       } finally {
         configFile.value = undefined
       }

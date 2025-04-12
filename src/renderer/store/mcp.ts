@@ -1,5 +1,28 @@
 import { defineStore } from 'pinia'
 
+type McpPrimitiveType = 'tools' | 'resources' | 'prompts'
+type McpMethodType =
+  | { type: 'list'; fn: () => any }
+  | { type: 'get'; fn: () => any }
+  | { type: 'read'; fn: () => any }
+  | { type: 'call'; fn: () => any }
+  | { type: 'templates/list'; fn: () => any }
+
+export interface FunctionType {
+  type: 'function'
+  function: {
+    name: string
+    description: string
+    parameters: string
+  }
+}
+
+export interface McpCoreType {
+  server: string
+  primitive: McpPrimitiveType
+  method: McpMethodType
+}
+
 export const useMcpStore = defineStore('mcpStore', {
   // TODO: fix any to type
   state: (): any => ({
@@ -10,20 +33,23 @@ export const useMcpStore = defineStore('mcpStore', {
   }),
 
   getters: {
-    getSelected(state) {
-      const mcpServers = this.getServers
+    getSelected(state): McpCoreType | null {
       const server = state.selected[0]
-      if (server) {
-        const selectedIndex = state.selectedChips[server] || 0
+      if (!server) return null
+      return this.getByServer(server)
+    },
+    getByServer(state) {
+      return (serverName: string): McpCoreType | null => {
+        const mcpServers = this.getServers
+        if (!mcpServers[serverName]) return null
+        const selectedIndex = state.selectedChips[serverName] || 0
         const selectedPrimitive = {
-          server,
-          primitive: Object.keys(mcpServers[server])[selectedIndex],
-          methods: Object.values(mcpServers[server])[selectedIndex]
+          server: serverName,
+          primitive: Object.keys(mcpServers[serverName])[selectedIndex] as McpPrimitiveType,
+          method: Object.values(mcpServers[serverName])[selectedIndex] as McpMethodType
         }
         console.log(selectedPrimitive)
         return selectedPrimitive
-      } else {
-        return { server: undefined, primitive: undefined, methods: undefined }
       }
     },
     getServers: () => {
@@ -33,14 +59,118 @@ export const useMcpStore = defineStore('mcpStore', {
   },
 
   actions: {
-    getServerFunction: function (primitiveName: string, methodName: string) {
-      const selected = this.getSelected
-      if (selected && selected.primitive === primitiveName) {
-        const fun = selected.methods[methodName]
-        return fun
+    getServerFunction: function (options: {
+      serverName?: string
+      primitiveName: string
+      methodName: string
+    }): Function | null {
+      let selected: McpCoreType
+      const { serverName, primitiveName, methodName } = options
+
+      if (serverName !== undefined) {
+        selected = this.getByServer(serverName)
+      } else {
+        selected = this.getSelected
+      }
+
+      if (selected?.primitive === primitiveName) {
+        return selected.method[methodName] || null
       }
       return null
     },
+
+    listServerTools: async function (serverNames?: string[]) {
+      const mcpTools: FunctionType[] = []
+
+      const targets: string[] = serverNames?.length ? serverNames : [this.getSelected?.server]
+
+      const promises = targets
+        .filter(Boolean) // filter invalid server
+        .map((serverName) =>
+          this.getServerFunction({
+            serverName,
+            primitiveName: 'tools',
+            methodName: 'list'
+          })?.()?.catch(() => null)
+        )
+
+      const results = await Promise.all(promises)
+      for (const toolsData of results.filter(Boolean)) {
+        if (Array.isArray(toolsData?.tools)) {
+          toolsData.tools.forEach((tool) => {
+            mcpTools.push({
+              type: 'function',
+              function: {
+                name: tool.name,
+                description: tool.description,
+                parameters: tool.inputSchema
+              }
+            })
+          })
+        }
+      }
+
+      return mcpTools
+    },
+
+    //   getServerFunction: function (param1: string, param2: string, param3?: string): Function | null {
+    //     let selected: McpCoreType;
+    //     let primitiveName: string;
+    //     let methodName: string;
+    //     if (param3) {
+    //         // Three parameters case: (serverName, primitiveName, methodName)
+    //         const serverName = param1;
+    //         primitiveName = param2;
+    //         methodName = param3;
+    //         selected = this.getByServer(serverName);
+    //     } else {
+    //         // Two parameters case: (primitiveName, methodName)
+    //         primitiveName = param1;
+    //         methodName = param2;
+    //         selected = this.getSelected;
+    //     }
+
+    //     if (selected && selected.primitive === primitiveName) {
+    //         const fun = selected.method[methodName];
+    //         return fun;
+    //     } else {
+    //       return null
+    //     }
+    // },
+
+    //   listServerTools: async function () {
+    //     const mcpTools: any = []
+    //     const fun = this.getServerFunction('tools', 'list')
+    //     if (typeof fun === 'function') {
+    //       const tools = await fun()
+    //       if (tools && Array.isArray(tools.tools)) {
+    //         for (const tool of tools.tools) {
+    //           const unit = {
+    //             type: 'function',
+    //             function: {
+    //               name: tool.name,
+    //               description: tool.description,
+    //               parameters: tool.inputSchema
+    //               // strict: true
+    //             }
+    //           }
+    //           console.log(unit)
+    //           mcpTools.push(unit)
+    //         }
+    //       }
+    //     }
+    //     return mcpTools
+    //   },
+
+    // getServerFunction: function (primitiveName: string, methodName: string) {
+    //   const selected = this.getSelected
+    //   // const selected = this.getByServer(serverName)
+    //   if (selected && selected.primitive === primitiveName) {
+    //     const fun = selected.method[methodName]
+    //     return fun
+    //   }
+    //   return null
+    // },
 
     loadServerTools: function () {
       this.loading = true
@@ -60,38 +190,13 @@ export const useMcpStore = defineStore('mcpStore', {
       }
     },
 
-    listServerTools: async function () {
-      const mcpTools: any = []
-      const fun = this.getServerFunction('tools', 'list')
-      if (typeof fun === 'function') {
-        const tools = await fun()
-        if (tools && Array.isArray(tools.tools)) {
-          for (const tool of tools.tools) {
-            const unit = {
-              type: 'function',
-              function: {
-                name: tool.name,
-                description: tool.description,
-                parameters: tool.inputSchema
-                // strict: true
-              }
-            }
-            console.log(unit)
-            mcpTools.push(unit)
-          }
-        }
-      }
-      return mcpTools
-    },
-
     listTools: async function () {
       const mcpServers = this.getServers
       if (!mcpServers) {
         return null
       }
       const mcpKeys = Object.keys(mcpServers)
-      // TODO: fix any to type
-      const mcpTools: any = []
+      const mcpTools: FunctionType[] = []
       for (const key of mcpKeys) {
         const toolsListFunction = mcpServers[key]?.tools?.list
         if (typeof toolsListFunction === 'function') {
@@ -170,6 +275,16 @@ export const useMcpStore = defineStore('mcpStore', {
         return {
           type: 'image_url',
           image_url: { url: imageUrl }
+        }
+      } else if (item.type === 'resource') {
+        return {
+          type: 'text',
+          text: JSON.stringify(item.resource, null, 2)
+        }
+      } else {
+        return {
+          type: 'text',
+          text: JSON.stringify(item, null, 2)
         }
       }
     },

@@ -9,6 +9,7 @@ export const useSnackbarStore = defineStore('snackbarStore', {
 
   actions: {
     showMessage(message, type = '') {
+      console.log(message)
       this.isShow = true
       this.message = message
       this.type = type

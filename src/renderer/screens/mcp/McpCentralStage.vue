@@ -30,32 +30,33 @@ const handleOpenLink = async (link: string): Promise<void> => {
 </script>
 
 <template>
-  <div v-if="mcpStore.getSelected.primitive === 'tools'">
-    <v-data-table
-      :key="mcpStore.getSelected"
-      hide-default-footer
-      hide-default-header
-      hide-no-data
-      disable-sort
-      :items-per-page="-1"
-      :items="mcpStore.serverTools"
-      :loading="mcpStore.loading"
-      @update:options="mcpStore.loadServerTools"
-    ></v-data-table>
-  </div>
-  <div v-else-if="mcpStore.getSelected.primitive === 'resources'">
-    <McpResourcePage :key="mcpStore.getSelected"></McpResourcePage>
-  </div>
+  <div v-if="mcpStore.getSelected">
+    <div v-if="mcpStore.getSelected.primitive === 'tools'">
+      <v-data-table
+        :key="mcpStore.getSelected"
+        hide-default-footer
+        hide-default-header
+        hide-no-data
+        disable-sort
+        :items-per-page="-1"
+        :items="mcpStore.serverTools"
+        :loading="mcpStore.loading"
+        @update:options="mcpStore.loadServerTools"
+      ></v-data-table>
+    </div>
+    <div v-else-if="mcpStore.getSelected.primitive === 'resources'">
+      <McpResourcePage :key="mcpStore.getSelected"></McpResourcePage>
+    </div>
 
-  <div
-    v-else-if="
-      typeof mcpStore.getSelected.primitive === 'string' &&
-      mcpStore.getSelected.primitive.length > 0
-    "
-  >
-    <McpPromptPage :key="mcpStore.getSelected"></McpPromptPage>
+    <div
+      v-else-if="
+        typeof mcpStore.getSelected.primitive === 'string' &&
+        mcpStore.getSelected.primitive.length > 0
+      "
+    >
+      <McpPromptPage :key="mcpStore.getSelected"></McpPromptPage>
+    </div>
   </div>
-
   <div v-else>
     <v-card
       v-for="news in mcpNews"
