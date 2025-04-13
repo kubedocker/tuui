@@ -52,6 +52,23 @@ The full config and corresponding types could be found in: [Config Type](/src/re
 
 Once you modify or import the LLM configuration, it will be stored in your localStorage by default. You can use the developer tools to view or clear the corresponding cache.
 
+## :lipstick: Demo
+
+### MCP primitive visualization
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/1.png)
+
+### Tool call tracing
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/2.png)
+
+### Specify tool selection
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/3.png)
+
+### LLM API setting
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/4.png)
+
+### Native devtools
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/5.png)
+
 ## :inbox_tray: Contributing
 
 We welcome contributions of any kind to this project, including feature enhancements, UI improvements, documentation updates, test case completions, and syntax corrections. I believe that a real developer can write better code than AI, so if you have concerns about certain parts of the code implementation, feel free to share your suggestions or submit a pull request.
