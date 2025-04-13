@@ -71,7 +71,7 @@ Once you modify or import the LLM configuration, it will be stored in your local
 
 ## Remote MCP server
 
-You can utilize Cloudflare's recommended 'mcp-remote' to implement the full suite of remote MCP server functionalities (including Auth). For example, simply add the following to your [config.json](src/main/assets/config.json) file:
+You can utilize Cloudflare's recommended [mcp-remote](https://github.com/geelen/mcp-remote) to implement the full suite of remote MCP server functionalities (including Auth). For example, simply add the following to your [config.json](src/main/assets/config.json) file:
 
 ```json
 {
@@ -81,13 +81,13 @@ You can utilize Cloudflare's recommended 'mcp-remote' to implement the full suit
       "args": [
         "-y",
         "mcp-remote",
-        "https://mcp.tuui.com/sse"
+        "https://YOURDOMAIN.com/sse"
       ]
     }
   }
 }
 ```
-In this example, I have provided a test remote server: `https://mcp.tuui.com`. This server will always approve your authentication requests.
+In this example, I have provided a test remote server: `https://YOURDOMAIN.com` on [Cloudflare](https://blog.cloudflare.com/remote-model-context-protocol-servers-mcp/). This server will always approve your authentication requests.
 
 If you encounter any issues (please try to maintain OAuth auto-redirect to prevent callback delays that might cause failures), such as the common HTTP 400 error. You can resolve them by clearing your browser cache on the authentication page and then attempting verification again:
 
