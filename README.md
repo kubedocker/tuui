@@ -74,6 +74,31 @@ Once you modify or import the LLM configuration, it will be stored in your local
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/5.png)
 
+## Remote MCP server
+
+You can utilize Cloudflare's recommended [mcp-remote](https://github.com/geelen/mcp-remote) to implement the full suite of remote MCP server functionalities (including Auth). For example, simply add the following to your [config.json](src/main/assets/config.json) file:
+
+```json
+{
+  "mcpServers": {
+    "cloudflare": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://YOURDOMAIN.com/sse"
+      ]
+    }
+  }
+}
+```
+In this example, I have provided a test remote server: `https://YOURDOMAIN.com` on [Cloudflare](https://blog.cloudflare.com/remote-model-context-protocol-servers-mcp/). This server will always approve your authentication requests.
+
+If you encounter any issues (please try to maintain OAuth auto-redirect to prevent callback delays that might cause failures), such as the common HTTP 400 error. You can resolve them by clearing your browser cache on the authentication page and then attempting verification again:
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/7.png)
+
+
 ## :inbox_tray: Contributing
 
 We welcome contributions of any kind to this project, including feature enhancements, UI improvements, documentation updates, test case completions, and syntax corrections. I believe that a real developer can write better code than AI, so if you have concerns about certain parts of the code implementation, feel free to share your suggestions or submit a pull request.
