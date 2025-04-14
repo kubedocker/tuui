@@ -30,7 +30,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'request-delete', payload: { index: number; range: number }): void
+  (_e: 'request-delete', _payload: { index: number; range: number }): void
 }>()
 
 const handleDeleteMessages = ({ index, range }: { index: number; range: number }) => {

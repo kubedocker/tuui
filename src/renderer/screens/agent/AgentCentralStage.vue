@@ -89,10 +89,6 @@ function onClickClose(selection) {
   selectedTree.value = selectedTree.value.filter((item) => item !== selection)
 }
 
-function onSelected(event) {
-  console.log(selectedTree)
-}
-
 function handleNameUpdate() {
   if (!agentStore.getRevised.name) {
     agentStore.getRevised.name = `Agent ${uuidv4()}`
@@ -158,7 +154,6 @@ function handleNameUpdate() {
           select-strategy="classic"
           true-icon="mdi-bookmark"
           selectable
-          @update:selected="onSelected"
         ></v-treeview>
       </v-row>
 

@@ -55,18 +55,23 @@ Once you modify or import the LLM configuration, it will be stored in your local
 ## :lipstick: Demo
 
 ### MCP primitive visualization
+
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/1.png)
 
 ### Tool call tracing
+
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/2.png)
 
 ### Specify tool selection
+
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/3.png)
 
 ### LLM API setting
+
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/4.png)
 
 ### Native devtools
+
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/5.png)
 
 ## :inbox_tray: Contributing

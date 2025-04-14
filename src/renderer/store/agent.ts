@@ -120,7 +120,6 @@ export const useAgentStore = defineStore('agentStore', {
       } else {
         return mcpStore.listTools()
       }
-
     }
   }
 })

@@ -6,7 +6,7 @@ const chatbotStore = useChatbotStore()
 
 const configFile = ref(undefined)
 
-watch(configFile, (newValue, oldValue) => {
+watch(configFile, (newValue, _oldValue) => {
   console.log(newValue)
   if (newValue) {
     const reader = new FileReader()

@@ -7,6 +7,8 @@
     "moduleResolution": "node",
     "jsx": "preserve",
     "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "resolveJsonModule": true,

@@ -29,7 +29,7 @@ const promptMessage = (conversation: string) => {
   const systemPrompt = agentStore.getPrompt()
 
   if (systemPrompt) {
-    return [{ content: systemPrompt, role: "system" }, ...conversation]
+    return [{ content: systemPrompt, role: 'system' }, ...conversation]
   } else {
     return [...conversation]
   }

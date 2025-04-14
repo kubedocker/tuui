@@ -13,7 +13,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'update:config', value: Partial<ChatbotConfig>): void
+  (_e: 'update:config', _value: Partial<ChatbotConfig>): void
 }
 
 // const props =

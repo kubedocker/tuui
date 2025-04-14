@@ -49,7 +49,7 @@ export const useChatbotStore = defineStore('chatbotStore', {
       this.chatbots = []
       if (json.chatbots) {
         if (Array.isArray(json.chatbots)) {
-          json.chatbots.forEach((newChatbot, index) => {
+          json.chatbots.forEach((newChatbot, _index) => {
             this.chatbots.push({ ...CHATBOT_DEFAULTS, ...newChatbot })
           })
         } else {
