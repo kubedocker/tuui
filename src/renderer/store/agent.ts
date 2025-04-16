@@ -104,7 +104,7 @@ export const useAgentStore = defineStore('agentStore', {
               // const result = parsed?.();
               // return result?.catch(() => null) ?? null;
               return parsed.name
-            } catch (error) {
+            } catch (_error) {
               return null
             }
           })

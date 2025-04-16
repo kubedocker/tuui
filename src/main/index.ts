@@ -8,10 +8,6 @@ let errorWindow
 app.setAppUserModelId('TUUI')
 
 app.on('ready', async () => {
-  if (Constants.IS_DEV_ENV) {
-    import('./index.dev')
-  }
-
   // Disable special menus on macOS by uncommenting the following, if necessary
   /*
   if (Constants.IS_MAC) {

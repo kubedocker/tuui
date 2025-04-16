@@ -4,7 +4,7 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 const mainAvailChannels: string[] = ['msgRequestGetVersion', 'msgOpenExternalLink', 'msgOpenFile']
 const rendererAvailChannels: string[] = []
 
-type AsyncFunction = (...args: any[]) => Promise<any>
+type AsyncFunction = (..._args: any[]) => Promise<any>
 
 interface MCPAPI {
   [key: string]: {
@@ -41,21 +41,21 @@ contextBridge.exposeInMainWorld('mainApi', {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
   },
-  on: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): void => {
+  on: (channel: string, listener: (_event: IpcRendererEvent, ..._args: any[]) => void): void => {
     if (rendererAvailChannels.includes(channel)) {
       ipcRenderer.on(channel, listener)
     } else {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
   },
-  once: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): void => {
+  once: (channel: string, listener: (_event: IpcRendererEvent, ..._args: any[]) => void): void => {
     if (rendererAvailChannels.includes(channel)) {
       ipcRenderer.once(channel, listener)
     } else {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
   },
-  off: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): void => {
+  off: (channel: string, listener: (_event: IpcRendererEvent, ..._args: any[]) => void): void => {
     if (rendererAvailChannels.includes(channel)) {
       ipcRenderer.off(channel, listener)
     } else {
@@ -84,7 +84,7 @@ async function exposeAPIs() {
   const api: MCPAPI = {}
 
   const createAPIMethods = (methods: Record<string, string>) => {
-    const result: Record<string, (...args: any) => Promise<any>> = {}
+    const result: Record<string, (..._args: any) => Promise<any>> = {}
     Object.keys(methods).forEach((key) => {
       const methodName = methods[key]
       result[key] = (...args: any) => ipcRenderer.invoke(methodName, ...args)

@@ -14,7 +14,7 @@ export function createTray(window: BrowserWindow, options) {
   tray = new Tray(Constants.ASSETS_PATH.icon)
   tray.setToolTip(trayOptions.tooltip)
   if (trayOptions.menu) {
-    tray.on('click', function (event) {
+    tray.on('click', function (_event) {
       debounce(() => toggleWindow(window), 100)
     })
     const contextMenu = Menu.buildFromTemplate([
@@ -53,10 +53,10 @@ export function createTray(window: BrowserWindow, options) {
     tray.setContextMenu(contextMenu)
   } else {
     // handle click on tray icon
-    tray.on('right-click', function (event) {
+    tray.on('right-click', function (_event) {
       debounce(() => toggleWindow(window))
     })
-    tray.on('click', function (event) {
+    tray.on('click', function (_event) {
       debounce(() => toggleWindow(window))
     })
     // no menu for tray window

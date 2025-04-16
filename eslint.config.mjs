@@ -27,7 +27,7 @@ export default defineConfig([
     '**/.github/'
   ]),
   {
-    extends: compat.extends('plugin:vue/vue3-recommended', 'prettier'),
+    extends: compat.extends('plugin:vue/recommended', 'prettier'),
 
     plugins: {
       vue
@@ -62,7 +62,14 @@ export default defineConfig([
       'no-useless-constructor': 0,
       'no-useless-assignment': 0,
       'no-useless-escape': 1,
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_'
+        }
+      ],
       'node/no-deprecated-api': 0
     }
   }

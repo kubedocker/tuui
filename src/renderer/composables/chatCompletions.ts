@@ -49,7 +49,7 @@ export const createCompletion = async (rawconversation) => {
 
   const conversation = rawconversation.reduce((newConversation, item) => {
     if (item.role === 'assistant') {
-      const { reasoningContent, ...rest } = item
+      const { _reasoningContent, ...rest } = item
       newConversation.push(rest)
     }
     // (item.role === "user" && item.content[0].type === "image_url") {

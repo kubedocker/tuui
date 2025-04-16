@@ -128,7 +128,7 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
 export const createErrorWindow = async (
   errorWindow: BrowserWindow,
   mainWindow: BrowserWindow,
-  details?: RenderProcessGoneDetails
+  _details?: RenderProcessGoneDetails
 ): Promise<BrowserWindow> => {
   if (!Constants.IS_DEV_ENV) {
     mainWindow?.hide()

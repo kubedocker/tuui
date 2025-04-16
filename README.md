@@ -83,21 +83,17 @@ You can utilize Cloudflare's recommended [mcp-remote](https://github.com/geelen/
   "mcpServers": {
     "cloudflare": {
       "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote",
-        "https://YOURDOMAIN.com/sse"
-      ]
+      "args": ["-y", "mcp-remote", "https://YOURDOMAIN.com/sse"]
     }
   }
 }
 ```
+
 In this example, I have provided a test remote server: `https://YOURDOMAIN.com` on [Cloudflare](https://blog.cloudflare.com/remote-model-context-protocol-servers-mcp/). This server will always approve your authentication requests.
 
 If you encounter any issues (please try to maintain OAuth auto-redirect to prevent callback delays that might cause failures), such as the common HTTP 400 error. You can resolve them by clearing your browser cache on the authentication page and then attempting verification again:
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/7.png)
-
 
 ## :inbox_tray: Contributing
 
