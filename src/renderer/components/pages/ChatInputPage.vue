@@ -49,67 +49,60 @@ const agentStore = useAgentStore()
         item-value="index"
         clearable
       >
+        <template v-slot:item="{ props: itemProps, item }">
+          <v-list-item v-bind="itemProps" :subtitle="`${item.raw.prompt}`">
+            <template #prepend>
+              <v-badge
+                class="ml-n1 mr-n4"
+                color="primary"
+                :content="item.raw.selectedNode.length"
+                inline
+                :max="99"
+              ></v-badge>
+            </template>
+          </v-list-item>
+        </template>
       </v-select>
     </v-col>
-    <v-col cols="4" class="pt-4 pb-0">
+    <v-col cols="4" class="pt-4 pb-0 pr-0">
       <!-- Adds a horizontal flex container (row direction) to override parent column layout, ensuring right alignment within v-col -->
       <div class="d-flex justify-end">
         <v-spacer></v-spacer>
-        <v-btn
+        <v-icon-btn
           v-if="messageStore.userMessage"
-          size="small"
           color="primary"
-          variant="elevated"
           icon="mdi-arrow-up"
           @click="messageStore.sendMessage"
-        >
-        </v-btn>
-        <v-btn
+          rounded="lg"
+        ></v-icon-btn>
+        <v-icon-btn
           v-else-if="messageStore.generating"
-          size="small"
           color="primary"
-          variant="elevated"
           icon="mdi-stop"
           @click="messageStore.stop"
-        ></v-btn>
-        <v-speed-dial
-          v-else-if="messageStore.conversation.length > 0"
-          location="bottom center"
-          transition="expand-transition"
-        >
-          <template #activator="{ props: activatorProps }">
-            <v-btn
-              v-bind="activatorProps"
-              size="small"
-              icon="mdi-dots-horizontal"
-              color="primary"
-            ></v-btn>
-          </template>
-          <v-btn
-            key="2"
+          rounded="lg"
+        ></v-icon-btn>
+        <div v-else-if="messageStore.conversation.length > 0">
+          <v-icon-btn
             v-tooltip:start="$t('chat.reg')"
-            size="small"
             color="primary"
-            variant="elevated"
             icon="mdi-autorenew"
             @click="messageStore.resendMessage"
-          >
-          </v-btn>
-          <v-btn
-            key="1"
+            rounded="lg"
+          ></v-icon-btn>
+
+          <v-divider class="mx-1" vertical></v-divider>
+
+          <v-icon-btn
             v-tooltip:start="$t('chat.new')"
             color="primary"
             variant="elevated"
             icon="mdi-pencil-plus"
             @click="messageStore.init()"
-          >
-          </v-btn>
-        </v-speed-dial>
-        <v-btn v-else size="small" color="grey" variant="elevated" icon="mdi-account-edit"> </v-btn>
-        <!-- <v-btn v-else size="small" :color="mcpStore.getServers ? 'primary': 'grey'" variant="elevated"
-                            @click="mcpStore.getServers ? promptStore.promptDialog = true : false"
-                            icon="mdi-account-edit">
-                        </v-btn> -->
+            rounded="lg"
+          ></v-icon-btn>
+        </div>
+        <v-icon-btn v-else color="grey" icon="mdi-account-edit" rounded="lg"></v-icon-btn>
       </div>
     </v-col>
   </v-row>

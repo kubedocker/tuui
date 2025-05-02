@@ -1,6 +1,4 @@
 <script setup lang="tsx">
-import { defineProps } from 'vue'
-
 defineProps<{
   src: string
 }>()
