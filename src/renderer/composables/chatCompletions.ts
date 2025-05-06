@@ -1,10 +1,23 @@
 import { useMessageStore } from '@/renderer/store/message'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
-// import { useMcpStore } from '@/renderer/store/mcp'
 import { useAgentStore } from '@/renderer/store/agent'
 
-// import { ChatbotConfig } from '@/renderer/types'
+type ChatCompletionMessage = {
+  content: string
+  reasoning_content?: string
+  tool_calls?: ChatCompletionMessageToolCall[]
+  role: 'assistant' // Completion can only reply as assistant
+}
+
+type ChatCompletionMessageToolCall = {
+  id: string
+  type: 'function' // Currently only 'function' is supported
+  function: {
+    name: string
+    arguments: string // Typically a JSON string
+  }
+}
 
 const isObjectEmpty = (obj?: Record<string, unknown>): boolean => {
   return !!obj && Object.keys(obj).length === 0
@@ -234,7 +247,7 @@ const parseChoices = (parsed, target) => {
   }
 }
 
-const parseChoice = (choice, target) => {
+const parseChoice = (choice: ChatCompletionMessage, target: ChatCompletionMessage) => {
   if (choice) {
     if (target.role === 'assistant') {
       if (typeof choice === 'string') {
@@ -249,26 +262,53 @@ const parseChoice = (choice, target) => {
   }
 }
 
-const parseTool = (tools, target) => {
-  if (tools) {
-    tools.map((tool) => {
-      const lastTool = target.tool_calls.at(-1)
-      if (lastTool && (!tool.id || lastTool.id === tool.id)) {
-        const source = tool.function
-        for (const key in source) {
-          // Determine if source[key] is null, skip if it is null
-          if (source[key] === null) {
-            continue
-          }
-          if (lastTool.function[key]) {
-            lastTool.function[key] += source[key]
-          } else {
-            lastTool.function[key] = source[key]
-          }
-        }
-      } else {
-        target.tool_calls.push(tool)
-      }
-    })
+const parseTool = (
+  tools: ChatCompletionMessageToolCall[] | undefined,
+  target: ChatCompletionMessage
+) => {
+  // Early return if no tools to process
+  if (!tools) return
+
+  // Initialize tool_calls array if it doesn't exist
+  if (!target.tool_calls) {
+    target.tool_calls = []
   }
+
+  tools.forEach((tool) => {
+    const toolCalls = target.tool_calls!
+    const lastTool = toolCalls[toolCalls.length - 1]
+    const sourceFunc = tool.function
+
+    // Case 1: Merge with last tool call when:
+    // - There is a previous tool call AND
+    // - (Current tool has no ID OR IDs match)
+    if (lastTool && (!tool.id || lastTool.id === tool.id)) {
+      const targetFunc = lastTool.function
+
+      // Merge each property from source function
+      Object.keys(sourceFunc).forEach((key) => {
+        const value = sourceFunc[key]
+
+        // Skip null values (don't overwrite existing values with null)
+        if (value === null) return
+
+        // Merge strategy:
+        // - If target has existing non-empty value: concatenate
+        // - Otherwise: overwrite
+        if (targetFunc[key] && targetFunc[key] !== '{}') {
+          targetFunc[key] += value
+        } else {
+          targetFunc[key] = value
+        }
+      })
+    }
+    // Case 2: Add as new tool call
+    else {
+      // Ensure arguments has a default empty object if not provided
+      if (sourceFunc.arguments == null) {
+        sourceFunc.arguments = '{}'
+      }
+      toolCalls.push(tool)
+    }
+  })
 }

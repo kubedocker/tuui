@@ -49,7 +49,7 @@ const agentStore = useAgentStore()
         item-value="index"
         clearable
       >
-        <template v-slot:item="{ props: itemProps, item }">
+        <template #item="{ props: itemProps, item }">
           <v-list-item v-bind="itemProps" :subtitle="`${item.raw.prompt}`">
             <template #prepend>
               <v-badge
@@ -72,23 +72,23 @@ const agentStore = useAgentStore()
           v-if="messageStore.userMessage"
           color="primary"
           icon="mdi-arrow-up"
-          @click="messageStore.sendMessage"
           rounded="lg"
+          @click="messageStore.sendMessage"
         ></v-icon-btn>
         <v-icon-btn
           v-else-if="messageStore.generating"
           color="primary"
           icon="mdi-stop"
-          @click="messageStore.stop"
           rounded="lg"
+          @click="messageStore.stop"
         ></v-icon-btn>
         <div v-else-if="messageStore.conversation.length > 0">
           <v-icon-btn
             v-tooltip:start="$t('chat.reg')"
             color="primary"
             icon="mdi-autorenew"
-            @click="messageStore.resendMessage"
             rounded="lg"
+            @click="messageStore.resendMessage"
           ></v-icon-btn>
 
           <v-divider class="mx-1" vertical></v-divider>
@@ -98,8 +98,8 @@ const agentStore = useAgentStore()
             color="primary"
             variant="elevated"
             icon="mdi-pencil-plus"
-            @click="messageStore.init()"
             rounded="lg"
+            @click="messageStore.init()"
           ></v-icon-btn>
         </div>
         <v-icon-btn v-else color="grey" icon="mdi-account-edit" rounded="lg"></v-icon-btn>

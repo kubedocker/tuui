@@ -1,4 +1,4 @@
-import { app, WebContents, RenderProcessGoneDetails } from 'electron'
+import { app, shell, WebContents, RenderProcessGoneDetails } from 'electron'
 import Constants from './utils/Constants'
 import { createErrorWindow, createMainWindow } from './MainRunner'
 
@@ -32,6 +32,20 @@ app.on('window-all-closed', () => {
   if (!Constants.IS_MAC) {
     app.quit()
   }
+})
+
+app.on('web-contents-created', (e, webContents) => {
+  webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url)
+    return { action: 'deny' }
+  })
+  webContents.on('will-navigate', (event, url) => {
+    // This will not affect hash/history navigation since only
+    // did-start-navigation and did-navigate-in-page will be
+    // triggered
+    event.preventDefault()
+    shell.openExternal(url)
+  })
 })
 
 app.on(

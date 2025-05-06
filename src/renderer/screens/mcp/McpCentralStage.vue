@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useMcpStore } from '@/renderer/store/mcp'
-import { openExternal } from '@/renderer/utils'
 import McpResourcePage from '@/renderer/components/pages/McpResourcePage.vue'
 import McpPromptPage from '@/renderer/components/pages/McpPromptPage.vue'
 const mcpStore = useMcpStore()
@@ -23,10 +22,6 @@ const mcpNews = [
     link: 'https://spec.modelcontextprotocol.io'
   }
 ]
-
-const handleOpenLink = async (link: string): Promise<void> => {
-  await openExternal(link)
-}
 </script>
 
 <template>
@@ -64,7 +59,7 @@ const handleOpenLink = async (link: string): Promise<void> => {
       class="ma-1 mb-5"
       :title="news.title"
       :subtitle="news.description"
-      @click="handleOpenLink(news.link)"
+      :href="news.link"
     >
     </v-card>
   </div>
