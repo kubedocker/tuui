@@ -17,6 +17,7 @@ function handleDelete(index, event) {
       :value="index"
       link
       :ripple="false"
+      :title="item.name"
       @click="console.log(agentStore.getRevised?.selectedNode)"
     >
       <template #prepend>
@@ -28,9 +29,6 @@ function handleDelete(index, event) {
           :max="99"
         ></v-badge>
       </template>
-      <v-list-item-content>
-        <v-list-item-title>{{ item.name }}</v-list-item-title>
-      </v-list-item-content>
       <template #append>
         <v-list-item-action>
           <v-icon-btn

@@ -39,10 +39,30 @@ app.on('web-contents-created', (e, webContents) => {
     shell.openExternal(url)
     return { action: 'deny' }
   })
+
+  // This will not affect hash/history navigation since only
+  // did-start-navigation and did-navigate-in-page will be
+  // triggered
   webContents.on('will-navigate', (event, url) => {
-    // This will not affect hash/history navigation since only
-    // did-start-navigation and did-navigate-in-page will be
-    // triggered
+    const currentUrl = webContents.getURL()
+    let currentHost, targetHost
+
+    try {
+      currentHost = new URL(currentUrl).host
+      targetHost = new URL(url).host
+    } catch (_error) {
+      // Invalid URL should be opened externally
+      event.preventDefault()
+      shell.openExternal(url)
+      return
+    }
+
+    // Allow reload on same Host, such as vite index reload
+    if (Constants.IS_DEV_ENV && currentHost === targetHost) {
+      return
+    }
+
+    // Other URL should be opened externally
     event.preventDefault()
     shell.openExternal(url)
   })

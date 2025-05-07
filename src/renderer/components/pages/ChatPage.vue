@@ -3,8 +3,37 @@ import { computed, reactive } from 'vue'
 import ImgDialog from '../common/ImgDialog.vue'
 import ChatCard from '../common/ChatCard.vue'
 import { isEmptyTools } from '@/renderer/composables/chatCompletions'
-import { MdPreview } from 'md-editor-v3'
+import { MdPreview, config } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
+
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
+
+import mermaid from 'mermaid'
+
+import highlight from 'highlight.js'
+import 'highlight.js/styles/atom-one-dark.css'
+
+import * as prettier from 'prettier'
+import parserMarkdown from 'prettier/plugins/markdown'
+
+config({
+  editorExtensions: {
+    prettier: {
+      prettierInstance: prettier,
+      parserMarkdownInstance: parserMarkdown
+    },
+    highlight: {
+      instance: highlight
+    },
+    katex: {
+      instance: katex
+    },
+    mermaid: {
+      instance: mermaid
+    }
+  }
+})
 
 interface Message {
   index: number
@@ -88,7 +117,6 @@ const groupMessages = computed<Group[]>(() => {
         <div class="message">
           <v-avatar class="mt-3 mr-3 mr-lg-6" color="primary" icon="mdi-account-circle" />
           <chat-card
-            class="gradient text-pre-wrap"
             :index="group.index"
             :messages="messages"
             :show-modify="true"

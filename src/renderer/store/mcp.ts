@@ -251,12 +251,14 @@ export const useMcpStore = defineStore('mcpStore', {
         return this.packReturn(`Tool name '${toolName}' not found`)
       }
 
-      let toolArguments
+      let toolArguments = {}
 
-      try {
-        toolArguments = JSON.parse(toolArgs)
-      } catch (e) {
-        return this.packReturn(`Arguments JSON parse error: '${e}'`)
+      if (toolArgs) {
+        try {
+          toolArguments = JSON.parse(toolArgs)
+        } catch (e) {
+          return this.packReturn(`Arguments JSON parse error: '${e}'`)
+        }
       }
 
       const params = {

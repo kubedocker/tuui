@@ -22,10 +22,8 @@ const chatbotStore = useChatbotStore()
       :value="index"
       link
       :ripple="false"
+      :title="item.name"
     >
-      <v-list-item-content>
-        <v-list-item-title>{{ item.name }}</v-list-item-title>
-      </v-list-item-content>
       <template #append>
         <v-list-item-action>
           <v-icon-btn

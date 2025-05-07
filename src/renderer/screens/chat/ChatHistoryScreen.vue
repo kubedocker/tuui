@@ -26,14 +26,10 @@ function parseContent(content) {
       two-line
       :value="item.id"
       link
+      :title="parseContent(item.messages[0]?.content)"
+      :subtitle="parseContent(item.messages.at(-1)?.content)"
       @click="historyStore.select(index)"
     >
-      <v-list-item-content>
-        <v-list-item-title>{{ parseContent(item.messages[0]?.content) }}</v-list-item-title>
-        <v-list-item-subtitle>{{
-          parseContent(item.messages.at(-1)?.content)
-        }}</v-list-item-subtitle>
-      </v-list-item-content>
     </v-list-item>
   </v-list>
 </template>

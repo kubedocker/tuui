@@ -101,7 +101,7 @@ function handleNameUpdate() {
 </script>
 
 <template>
-  <v-div v-if="agentStore.getRevised" :key="agentStore.getRevised">
+  <div v-if="agentStore.getRevised" :key="agentStore.getRevised">
     <v-card :title="$t('agent.config')">
       <v-divider></v-divider>
       <v-text-field
@@ -128,7 +128,7 @@ function handleNameUpdate() {
               class="mx-2 mt-2"
               auto-grow
               variant="solo-filled"
-              :error-messages="isPristine || 'Please save'"
+              :error-messages="isPristine ? '' : 'Please save'"
             ></v-textarea>
           </template>
           <template #actions>
@@ -205,5 +205,5 @@ function handleNameUpdate() {
       <v-btn @click="console.log(agentStore.selected)"></v-btn>
     </template> -->
     </v-card>
-  </v-div>
+  </div>
 </template>
