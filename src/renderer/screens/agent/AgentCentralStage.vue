@@ -33,20 +33,29 @@ const items = ref([
 
 watch(allTools, (val) => {
   console.log('Tool list updated')
+  const flatChildren = []
   const children = val.map((type) => ({
     id: type.server,
     name: type.server,
     children: type.tools.map((obj) => {
-      return {
-        id: agentStore.genId(type.server, obj.name),
+      const id = agentStore.genId(type.server, obj.name)
+      const unit = {
+        id: id,
         server: type.server,
         name: obj.name
       }
+      flatChildren.push(id)
+      return unit
     })
   }))
   const rootObj = items.value[0]
   rootObj.children = children
   items.value = [rootObj]
+
+  const newSelectedNode = agentStore.getRevised.selectedNode.filter((node) => {
+    return flatChildren.includes(node)
+  })
+  agentStore.getRevised.selectedNode = newSelectedNode
 })
 
 onMounted(() => {
