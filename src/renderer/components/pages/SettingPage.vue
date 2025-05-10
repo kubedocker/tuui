@@ -85,6 +85,8 @@ const validateNumberRange = (min: number, max: number) => {
           >
           </v-combobox>
         </v-col>
+        <v-checkbox :model-value="config.mcp" :label="$t('setting.mcp')" color="primary">
+        </v-checkbox>
         <v-checkbox :model-value="config.stream" :label="$t('setting.stream')" color="primary">
         </v-checkbox>
       </v-row>

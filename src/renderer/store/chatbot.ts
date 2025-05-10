@@ -1,5 +1,11 @@
 import { defineStore } from 'pinia'
-import { ChatbotConfig, CHATBOT_DEFAULTS } from '@/renderer/types'
+import {
+  ChatbotConfig,
+  CHATBOT_DEFAULTS,
+  CHATBOT_QWEN,
+  CHATBOT_OPENAI,
+  CHATBOT_DEEPINFRA
+} from '@/renderer/types'
 import { v4 as uuidv4 } from 'uuid'
 
 export interface ChatbotStoreState {
@@ -10,7 +16,21 @@ export interface ChatbotStoreState {
 
 export const useChatbotStore = defineStore('chatbotStore', {
   state: (): ChatbotStoreState => ({
-    chatbots: [{ ...CHATBOT_DEFAULTS, name: 'Chatbot Default' }],
+    chatbots: [
+      { ...CHATBOT_DEFAULTS, name: 'Chatbot Default', mcp: false },
+      {
+        ...CHATBOT_DEFAULTS,
+        ...CHATBOT_QWEN
+      },
+      {
+        ...CHATBOT_DEFAULTS,
+        ...CHATBOT_OPENAI
+      },
+      {
+        ...CHATBOT_DEFAULTS,
+        ...CHATBOT_DEEPINFRA
+      }
+    ],
     currentChatbotId: 0, // points to first chatbot by default
     selectedChatbotId: 0
   }),

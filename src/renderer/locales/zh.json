@@ -48,7 +48,7 @@
     "advanced": "Advanced",
     "method": "HTTP Method",
     "stream": "Stream",
-    "mcp": "MCP",
+    "mcp": "MCP工具",
     "maxTokensPrefix": "Max Tokens Prefix",
     "temperature": "Temperature",
     "topP": "Top P",

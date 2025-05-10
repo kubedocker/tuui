@@ -45,6 +45,9 @@ export const useAgentStore = defineStore('agentStore', {
     }
   },
   actions: {
+    resetState() {
+      this.$reset()
+    },
     addAgent() {
       this.agents.push({ ...AGENTS_DEFAULTS, name: `Agent ${uuidv4()}` })
     },

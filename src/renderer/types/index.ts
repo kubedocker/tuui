@@ -62,3 +62,28 @@ export const CHATBOT_DEFAULTS = {
   stream: true,
   mcp: true
 }
+
+export const CHATBOT_QWEN = {
+  url: 'https://dashscope.aliyuncs.com/compatible-mode',
+  urlList: ['https://dashscope.aliyuncs.com/compatible-mode'],
+  name: 'Qwen',
+  model: 'qwen-turbo',
+  modelList: ['qwen-turbo', 'qwen-plus', 'qwen-max']
+}
+
+export const CHATBOT_OPENAI = {
+  url: 'https://api.openai.com',
+  urlList: ['https://api.openai.com', 'https://api.aiql.com'],
+  name: 'OpenAI & Proxy',
+  model: 'gpt-4-turbo',
+  modelList: ['gpt-4-turbo', 'gpt-4.1', 'gpt-4o', 'o1']
+}
+
+export const CHATBOT_DEEPINFRA = {
+  url: 'https://api.deepinfra.com',
+  urlList: ['https://api.deepinfra.com'],
+  path: '/v1/openai/chat/completions',
+  name: 'DeepInfra',
+  model: 'gpt-4-turbo',
+  modelList: ['gpt-4-turbo', 'gpt-4.1', 'gpt-4o', 'o1']
+}
