@@ -38,3 +38,30 @@ $ npm run dev
 If your application doesn't appear after running command line commands, you may need to review if the default port is being used by another app.
 
 Vite uses port `5173` by default.
+
+## Update NPM Packages
+
+1. Check for outdated packages:
+
+```shell
+$ npm outdated
+```
+
+2. Check available updates using `npm-check-updates`:
+```shell
+$ npx npm-check-updates
+```
+
+3. Upgrade your `package.json`:
+
+```shell
+$ npx npm-check-updates -u
+```
+
+4. Install the new versions:
+```shell
+$ npm install
+```
+
+**Pro Tip**: Always test your application after major updates to ensure compatibility.
+
