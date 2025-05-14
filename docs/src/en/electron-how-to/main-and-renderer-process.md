@@ -23,3 +23,17 @@ rendererPlugin({
 ```
 
 For more information on this, see the following articles: https://github.com/electron-vite/vite-plugin-electron-renderer
+
+### How to handle CORS restrictions in development?
+
+WebSecurity is enabled by default (in `DEFAULT_WEB_PREFERENCES`) for production-grade security. However, during backend development/debugging:
+
+- Temporarily disable webSecurity if:
+  - Backend lacks CORS headers (Access-Control-Allow-Origin, etc.)
+  - Preflight OPTIONS requests receive 302 redirects (non-standard handling)
+
+This allows direct POST requests to chat completions API without browser-enforced CORS restrictions.
+
+> [!WARNING] Only use this workaround for local development. Please re-enable webSecurity before deploying to production environments.
+
+For more information on this, see the following articles: https://www.electronjs.org/docs/latest/tutorial/security

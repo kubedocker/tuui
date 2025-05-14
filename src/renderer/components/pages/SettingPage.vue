@@ -1,12 +1,18 @@
-<script setup lang="tsx">
-// import { computed } from 'vue'
+<script setup lang="ts">
+import { ref, watch } from 'vue'
 import { ChatbotConfig } from '@/renderer/types'
 import { useI18n } from 'vue-i18n'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { v4 as uuidv4 } from 'uuid'
+import { getApiToken, listenStdioProgress, removeListenStdioProgress } from '@/renderer/utils'
 
 const layoutStore = useLayoutStore()
 const { t } = useI18n()
+const isLoading = ref(false)
+const apiDialog = ref(false)
+
+const stderr = ref<string[]>([])
+const stdout = ref<string[]>([])
 
 interface Props {
   config: ChatbotConfig
@@ -19,7 +25,6 @@ interface Emits {
 // const props =
 defineProps<Props>()
 const emit = defineEmits<Emits>()
-
 const handleUpdate = <K extends keyof ChatbotConfig>(key: K, value: ChatbotConfig[K]) => {
   emit('update:config', { [key]: value } as Partial<ChatbotConfig>)
 }
@@ -27,6 +32,32 @@ const handleUpdate = <K extends keyof ChatbotConfig>(key: K, value: ChatbotConfi
 // defineExpose({
 //   updateConfig: handleUpdate
 // })
+
+watch(apiDialog, (_val) => {
+  stdout.value.length = 0
+  stderr.value.length = 0
+})
+
+const handleGetApiToken = async (cli: string): Promise<void> => {
+  const handleProgress = (_event, progress) => {
+    stdout.value.push(progress)
+  }
+
+  try {
+    isLoading.value = true
+    listenStdioProgress(handleProgress)
+
+    const token = await getApiToken(cli)
+    handleUpdate('apiKey', token)
+    apiDialog.value = false
+  } catch (error: any) {
+    stderr.value.push(error.toString())
+    console.log(error.toString())
+  } finally {
+    isLoading.value = false
+    removeListenStdioProgress(handleProgress)
+  }
+}
 
 const validateNumberRange = (min: number, max: number) => {
   return (value: string | number | null): boolean | string => {
@@ -70,9 +101,51 @@ const validateNumberRange = (min: number, max: number) => {
         prepend-inner-icon="mdi-key"
         clearable
         hide-details
+        :loading="isLoading"
         @update:model-value="(v) => handleUpdate('apiKey', v)"
         @click:append-inner="layoutStore.apiKeyShow = !layoutStore.apiKeyShow"
-      ></v-text-field>
+      >
+        <template #append>
+          <v-icon-btn
+            :color="config.apiCli ? 'primary' : undefined"
+            icon="mdi-application-edit"
+            variant="plain"
+            @click="apiDialog = true"
+          >
+          </v-icon-btn>
+        </template>
+      </v-text-field>
+      <v-dialog v-model="apiDialog" width="auto">
+        <v-card
+          width="50vw"
+          max-width="700"
+          prepend-icon="mdi-console"
+          :title="$t('setting.dialog')"
+        >
+          <v-divider></v-divider>
+          <v-card-text>
+            <v-textarea
+              :model-value="config.apiCli"
+              rows="1"
+              auto-grow
+              :loading="isLoading"
+              :hide-details="stderr.length == 0"
+              :error-messages="stderr.at(-1)"
+              variant="solo"
+              @update:model-value="(v) => handleUpdate('apiCli', v)"
+            >
+            </v-textarea>
+          </v-card-text>
+          <v-divider></v-divider>
+          <template #actions>
+            <v-btn
+              :disabled="!config.apiCli"
+              :text="$t('setting.exec')"
+              @click="handleGetApiToken(config.apiCli)"
+            ></v-btn>
+          </template>
+        </v-card>
+      </v-dialog>
 
       <v-row class="px-2 mr-2">
         <v-col>
@@ -85,9 +158,19 @@ const validateNumberRange = (min: number, max: number) => {
           >
           </v-combobox>
         </v-col>
-        <v-checkbox :model-value="config.mcp" :label="$t('setting.mcp')" color="primary">
+        <v-checkbox
+          :model-value="config.mcp"
+          :label="$t('setting.mcp')"
+          color="primary"
+          @update:model-value="(v) => handleUpdate('mcp', Boolean(v))"
+        >
         </v-checkbox>
-        <v-checkbox :model-value="config.stream" :label="$t('setting.stream')" color="primary">
+        <v-checkbox
+          :model-value="config.stream"
+          :label="$t('setting.stream')"
+          color="primary"
+          @update:model-value="(v) => handleUpdate('stream', Boolean(v))"
+        >
         </v-checkbox>
       </v-row>
 

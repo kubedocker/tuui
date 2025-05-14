@@ -42,6 +42,8 @@
     "title-model": "模型参数",
     "name": "名称",
     "apikey": "API 密钥",
+    "dialog": "命令行调用",
+    "exec": "执行",
     "url": "URL",
     "path": "Path",
     "model": "Model",

@@ -23,3 +23,19 @@ rendererPlugin({
 ```
 
 欲了解更多信息，请参阅以下文章: https://github.com/electron-vite/vite-plugin-electron-renderer
+
+### 如何解决开发环境中的CORS限制问题？
+
+默认情况下，WebSecurity功能（定义在`DEFAULT_WEB_PREFERENCES`）会启用生产级安全防护。但在后端开发/调试过程中：
+
+- 若出现以下情况可临时关闭webSecurity：
+
+  - 后端未配置CORS响应头（如Access-Control-Allow-Origin等）
+
+  - OPTIONS预检请求被302重定向（非标准处理方式）
+
+此操作将允许直接向聊天补全API发起POST请求，绕过浏览器强制的CORS限制。
+
+> [!WARNING] 本方案仅限本地开发环境使用。部署至生产环境前务必重新启用webSecurity功能。
+
+欲了解更多信息，请参阅以下文章: https://www.electronjs.org/zh/docs/latest/tutorial/security

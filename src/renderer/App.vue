@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { DefaultLayout } from '@/renderer/components/layouts'
 </script>
 
@@ -7,10 +7,10 @@ import { DefaultLayout } from '@/renderer/components/layouts'
 </template>
 
 <style>
-html {
-  /* overflow-y: auto !important; */
+/* html {
+  overflow-y: auto !important;
   user-select: none;
-}
+} */
 
 html,
 body {

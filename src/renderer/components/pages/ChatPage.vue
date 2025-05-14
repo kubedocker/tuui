@@ -285,7 +285,7 @@ const groupMessages = computed<Group[]>(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .chat-message {
   border-bottom: 1px solid #e5e7eb;
 }
@@ -298,6 +298,10 @@ const groupMessages = computed<Group[]>(() => {
 .md-preview {
   width: 100vw;
   max-width: 100%;
+}
+
+.md-editor-preview {
+  word-break: keep-all;
 }
 
 .conversation-area {

@@ -2,6 +2,7 @@ export interface ChatbotConfig {
   name: string
 
   apiKey: string
+  apiCli: string
 
   url: string
   urlList: string[]
@@ -32,6 +33,7 @@ export interface ChatbotConfig {
 export const CHATBOT_DEFAULTS = {
   name: '',
   apiKey: '',
+  apiCli: '',
 
   url: 'https://ai.aiql.com',
   urlList: ['https://ai.aiql.com'],
