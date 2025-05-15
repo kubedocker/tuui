@@ -39,7 +39,6 @@ $ npm run dev
 
 Vite 默认使用端口 `5173`。
 
-
 ## NPM 包更新指南
 
 1. 检查过时的包:
@@ -49,6 +48,7 @@ $ npm outdated
 ```
 
 2. 使用 `npm-check-updates` 检查可用更新:
+
 ```shell
 $ npx npm-check-updates
 ```
@@ -60,6 +60,7 @@ $ npx npm-check-updates -u
 ```
 
 4. 安装新版本:
+
 ```shell
 $ npm install
 ```

@@ -53,6 +53,16 @@ contextBridge.exposeInMainWorld('mainApi', {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
   },
+  removeListener: (
+    channel: string,
+    listener: (_event: IpcRendererEvent, ..._args: any[]) => void
+  ): void => {
+    if (rendererAvailChannels.includes(channel)) {
+      ipcRenderer.removeListener(channel, listener)
+    } else {
+      throw new Error(`Unknown ipc channel name: ${channel}`)
+    }
+  },
   once: (channel: string, listener: (_event: IpcRendererEvent, ..._args: any[]) => void): void => {
     if (rendererAvailChannels.includes(channel)) {
       ipcRenderer.once(channel, listener)

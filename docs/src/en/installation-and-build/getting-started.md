@@ -48,6 +48,7 @@ $ npm outdated
 ```
 
 2. Check available updates using `npm-check-updates`:
+
 ```shell
 $ npx npm-check-updates
 ```
@@ -59,9 +60,9 @@ $ npx npm-check-updates -u
 ```
 
 4. Install the new versions:
+
 ```shell
 $ npm install
 ```
 
 **Pro Tip**: Always test your application after major updates to ensure compatibility.
-
