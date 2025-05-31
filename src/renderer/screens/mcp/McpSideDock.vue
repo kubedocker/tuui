@@ -1,21 +1,35 @@
 <script setup lang="ts">
-// import { getCurrentInstance  } from 'vue'
+import { ref } from 'vue'
 import { initAllMcpServers } from '@/renderer/utils'
 import { useMcpStore } from '@/renderer/store/mcp'
+import { useSnackbarStore } from '@/renderer/store/snackbar'
+const snackbarStore = useSnackbarStore()
 
 const mcpStore = useMcpStore()
 
+const isLoading = ref(false)
+
 async function activeAllMcpServers() {
-  const configs = mcpStore.getServers
-  await initAllMcpServers(configs)
-  await mcpStore.updateServers()
-  location.reload()
+  isLoading.value = true
+  try {
+    const configs = mcpStore.getServers
+    const result = await initAllMcpServers(configs)
+    console.log(result)
+    await mcpStore.updateServers()
+    if (result.status == 'error') {
+      snackbarStore.showErrorMessage(result.error.toString())
+    } else {
+      location.reload()
+    }
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
 <template>
   <v-container>
-    <v-btn block @click="activeAllMcpServers()">
+    <v-btn block :loading="isLoading" @click="activeAllMcpServers()">
       {{ $t('mcp.init') }}
     </v-btn>
   </v-container>

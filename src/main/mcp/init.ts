@@ -1,5 +1,5 @@
 import { ClientObj, ConfigObj, ServerConfig } from './types'
-import { Notification } from 'electron'
+// import { Notification } from 'electron'
 import { initializeClient } from './client'
 import { loadConfigFile } from './config'
 import Constants from '../utils/Constants'
@@ -27,11 +27,12 @@ export async function initClients(allConfig: ConfigObj): Promise<ClientObj[]> {
       return clients
     } catch (error) {
       console.error('Error during client initialization:', error?.message)
-      new Notification({
-        title: 'Client initialization failed',
-        body: 'Cannot start with current config file: ' + error?.message
-      }).show()
-      process.exit(1)
+      throw new Error(`${error?.message}`)
+      // new Notification({
+      //   title: 'Client initialization failed',
+      //   body: 'Cannot start with current config file: ' + error?.message
+      // }).show()
+      // process.exit(1)
     }
   } else {
     console.log('NO clients initialized.')

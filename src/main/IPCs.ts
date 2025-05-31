@@ -8,6 +8,7 @@ import { spawn } from 'child_process'
 
 import { initClients } from './mcp/init'
 import { disconnect } from './mcp/connection'
+import { loadConfig } from './mcp/init'
 
 const handlerRegistry = new Map<string, Function>()
 
@@ -33,14 +34,29 @@ export default class IPCs {
 
       IPCs.removeAllHandlers()
 
-      const newClients = await initClients(config)
-      const features = newClients.map((params) => {
-        return registerIpcHandlers(params)
-      })
+      try {
+        const newClients = await initClients(config)
+        const features = newClients.map((params) => {
+          return registerIpcHandlers(params)
+        })
 
-      IPCs.updateMCP(features)
-      this.clients = newClients
-      return features
+        IPCs.updateMCP(features)
+        this.clients = newClients
+        return features
+      } catch (error) {
+        const configs = await loadConfig()
+
+        const features = configs.map((params) => {
+          return registerIpcHandlers(params)
+        })
+
+        IPCs.updateMCP(features)
+
+        return {
+          status: 'error',
+          error: error
+        }
+      }
     })
 
     // Open url via web browser

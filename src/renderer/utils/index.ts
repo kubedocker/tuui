@@ -25,8 +25,6 @@ export default class Utils {
     const filteredConfigs = Object.fromEntries(
       Object.entries(configs).map(([key, value]) => [key, value?.config])
     )
-    console.log(filteredConfigs)
-
     return window.mainApi.invoke('msgInitAllMcpServers', filteredConfigs)
   }
 
