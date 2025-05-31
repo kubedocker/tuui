@@ -8,7 +8,7 @@ import Constants, { TrayOptions } from './utils/Constants'
 import IPCs, { registerIpcHandlers } from './IPCs'
 import { createTray, hideWindow, showWindow } from './tray'
 
-import { initClient } from './mcp/init'
+import { loadConfig } from './mcp/init'
 
 const options = {
   width: Constants.IS_DEV_ENV ? 1500 : 1200,
@@ -104,14 +104,13 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
     })
   }
 
-  const clients = await initClient()
-
   // Initialize IPC Communication
   IPCs.initialize()
 
-  const features = clients.map(({ name, client, capabilities }) => {
-    console.log('Capabilities:', name, '\n', capabilities)
-    return registerIpcHandlers(name, client, capabilities)
+  const configs = await loadConfig()
+
+  const features = configs.map((params) => {
+    return registerIpcHandlers(params)
   })
 
   IPCs.initializeMCP(features)

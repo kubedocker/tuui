@@ -1,12 +1,23 @@
 import { defineStore } from 'pinia'
+import type { MCPAPI } from '../../preload/types'
 
-type McpPrimitiveType = 'tools' | 'resources' | 'prompts'
+type McpPrimitiveType = 'tools' | 'resources' | 'prompts' | 'config'
+type AllowedPrimitive = Exclude<McpPrimitiveType, 'config'>
 type McpMethodType =
   | { type: 'list'; fn: () => any }
   | { type: 'get'; fn: () => any }
   | { type: 'read'; fn: () => any }
   | { type: 'call'; fn: () => any }
   | { type: 'templates/list'; fn: () => any }
+  | string
+
+export function getAllowedPrimitive(item: MCPAPI): AllowedPrimitive[] {
+  if (!item) return []
+
+  return (Object.keys(item) as Array<keyof typeof item>).filter((key) =>
+    ['tools', 'resources', 'prompts'].includes(key as AllowedPrimitive)
+  ) as AllowedPrimitive[]
+}
 
 export interface FunctionType {
   type: 'function'
@@ -42,23 +53,36 @@ export const useMcpStore = defineStore('mcpStore', {
       return (serverName: string): McpCoreType | null => {
         const mcpServers = this.getServers
         if (!mcpServers[serverName]) return null
-        const selectedIndex = state.selectedChips[serverName] || 0
-        const selectedPrimitive = {
-          server: serverName,
-          primitive: Object.keys(mcpServers[serverName])[selectedIndex] as McpPrimitiveType,
-          method: Object.values(mcpServers[serverName])[selectedIndex] as McpMethodType
+        const selectedIndex = state.selectedChips[serverName]
+        if (typeof selectedIndex === 'number') {
+          const selectedPrimitive = {
+            server: serverName,
+            primitive: Object.keys(mcpServers[serverName])[selectedIndex] as McpPrimitiveType,
+            method: Object.values(mcpServers[serverName])[selectedIndex] as McpMethodType
+          }
+          console.log(selectedPrimitive)
+          return selectedPrimitive
+        } else {
+          return {
+            server: serverName,
+            primitive: 'config',
+            method: JSON.stringify(mcpServers[serverName].config, null, 2)
+          }
         }
-        console.log(selectedPrimitive)
-        return selectedPrimitive
       }
     },
-    getServers: () => {
+    getServers: (): MCPAPI => {
       // console.log('MCP:', window.mcpServers)
-      return window.mcpServers
+      return window.mcpServers.get() as MCPAPI
     }
   },
 
   actions: {
+    updateServers: async function () {
+      const servers = await window.mcpServers.refresh()
+      console.log(servers)
+      return servers
+    },
     getServerFunction: function (options: {
       serverName?: string
       primitiveName: string
@@ -74,7 +98,7 @@ export const useMcpStore = defineStore('mcpStore', {
       }
 
       if (selected?.primitive === primitiveName) {
-        return selected.method[methodName] || null
+        return selected.method?.[methodName] || null
       }
       return null
     },

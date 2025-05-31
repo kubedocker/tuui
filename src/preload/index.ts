@@ -1,34 +1,17 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
+import { AsyncFunction, MCPAPI } from './types'
 
 // Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
 const mainAvailChannels: string[] = [
   'msgRequestGetVersion',
   'msgOpenExternalLink',
   'msgOpenFile',
-  'msgGetApiToken'
+  'msgGetApiToken',
+  'msgInitAllMcpServers'
 ]
 const rendererAvailChannels: string[] = ['renderListenStdioProgress']
 
-type AsyncFunction = (..._args: any[]) => Promise<any>
-
-interface MCPAPI {
-  [key: string]: {
-    tools?: {
-      list?: AsyncFunction
-      call?: AsyncFunction
-    }
-    prompts?: {
-      list?: AsyncFunction
-      get?: AsyncFunction
-    }
-    resources?: {
-      list?: AsyncFunction
-      read?: AsyncFunction
-    }
-  }
-}
-
-interface CLIENT {
+type CLIENT = {
   name: string
   tools?: Record<string, string>
   prompts?: Record<string, string>
@@ -94,35 +77,63 @@ async function listClients(): Promise<CLIENT[]> {
   return await ipcRenderer.invoke('list-clients')
 }
 
-async function exposeAPIs() {
-  const clients = await listClients()
-  const api: MCPAPI = {}
-
-  const createAPIMethods = (methods: Record<string, string>) => {
-    const result: Record<string, (..._args: any) => Promise<any>> = {}
-    Object.keys(methods).forEach((key) => {
-      const methodName = methods[key]
-      result[key] = (...args: any) => ipcRenderer.invoke(methodName, ...args)
-    })
-    return result
-  }
-
-  clients.forEach((client) => {
-    const { name, tools, prompts, resources } = client
-    api[name] = {}
-
-    if (tools) {
-      api[name].tools = createAPIMethods(tools)
-    }
-    if (prompts) {
-      api[name].prompts = createAPIMethods(prompts)
-    }
-    if (resources) {
-      api[name].resources = createAPIMethods(resources)
-    }
+function createAPIMethods(methods: Record<string, string>) {
+  const result: Record<string, AsyncFunction> = {}
+  Object.keys(methods).forEach((key) => {
+    const methodName = methods[key]
+    result[key] = (...args: any[]) => ipcRenderer.invoke(methodName, ...args)
   })
-
-  contextBridge.exposeInMainWorld('mcpServers', api)
+  return result
 }
 
-exposeAPIs()
+const api = {
+  _currentAPI: {},
+  get: () => {
+    console.log('Preload currentAPI:', api._currentAPI)
+    return api._currentAPI
+  },
+  refresh: async () => {
+    await refreshAPI()
+    return api._currentAPI
+  },
+  update: async (name: string) => {
+    await updateAPI(name)
+    return api._currentAPI
+  }
+}
+
+function buildClientAPI(client: any): MCPAPI[string] {
+  const { tools, prompts, resources, config } = client
+  const apiItem: MCPAPI[string] = {}
+
+  if (tools) apiItem.tools = createAPIMethods(tools)
+  if (prompts) apiItem.prompts = createAPIMethods(prompts)
+  if (resources) apiItem.resources = createAPIMethods(resources)
+
+  apiItem.config = config
+
+  return apiItem
+}
+
+async function refreshAPI() {
+  const clients = await listClients()
+  const newAPI: MCPAPI = {}
+
+  clients.forEach((client) => {
+    newAPI[client.name] = buildClientAPI(client)
+  })
+
+  api._currentAPI = newAPI
+}
+
+async function updateAPI(name: string) {
+  const clients = await listClients()
+  const client = clients.find((c) => c.name === name)
+  if (!client) return
+
+  api._currentAPI[name] = buildClientAPI(client)
+}
+
+refreshAPI()
+
+contextBridge.exposeInMainWorld('mcpServers', api)

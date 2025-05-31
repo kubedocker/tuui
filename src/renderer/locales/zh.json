@@ -7,6 +7,9 @@
     "setting": "设置界面",
     "error": "未知错误"
   },
+  "mcp": {
+    "init": "初始化 MCP 服务端"
+  },
   "menu": {
     "change-theme": "改变主题",
     "change-language": "改变语言",

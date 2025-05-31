@@ -37,16 +37,18 @@ watch(allTools, (val) => {
   const children = val.map((type) => ({
     id: type.server,
     name: type.server,
-    children: type.tools.map((obj) => {
-      const id = agentStore.genId(type.server, obj.name)
-      const unit = {
-        id: id,
-        server: type.server,
-        name: obj.name
-      }
-      flatChildren.push(id)
-      return unit
-    })
+    children: type.tools
+      ? type.tools.map((obj) => {
+          const id = agentStore.genId(type.server, obj.name)
+          const unit = {
+            id: id,
+            server: type.server,
+            name: obj.name
+          }
+          flatChildren.push(id)
+          return unit
+        })
+      : []
   }))
   const rootObj = items.value[0]
   rootObj.children = children

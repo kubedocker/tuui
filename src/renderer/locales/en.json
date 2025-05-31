@@ -7,6 +7,9 @@
     "setting": "Setting Screen",
     "error": "Unknown Error"
   },
+  "mcp": {
+    "init": "Init MCP Servers"
+  },
   "menu": {
     "change-theme": "Change Theme",
     "change-language": "Change Language",

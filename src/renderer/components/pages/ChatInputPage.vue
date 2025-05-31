@@ -84,22 +84,22 @@ const agentStore = useAgentStore()
         ></v-icon-btn>
         <div v-else-if="messageStore.conversation.length > 0">
           <v-icon-btn
-            v-tooltip:start="$t('chat.reg')"
-            color="primary"
-            icon="mdi-autorenew"
-            rounded="lg"
-            @click="messageStore.resendMessage"
-          ></v-icon-btn>
-
-          <v-divider class="mx-1" vertical></v-divider>
-
-          <v-icon-btn
             v-tooltip:start="$t('chat.new')"
             color="primary"
             variant="elevated"
             icon="mdi-pencil-plus"
             rounded="lg"
             @click="messageStore.init()"
+          ></v-icon-btn>
+
+          <v-divider class="mx-1" vertical></v-divider>
+
+          <v-icon-btn
+            v-tooltip:start="$t('chat.reg')"
+            color="primary"
+            icon="mdi-autorenew"
+            rounded="lg"
+            @click="messageStore.resendMessage"
           ></v-icon-btn>
         </div>
         <v-icon-btn v-else color="grey" icon="mdi-account-edit" rounded="lg"></v-icon-btn>

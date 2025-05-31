@@ -3,6 +3,7 @@ import ErrorScreen from '@/renderer/screens/ErrorScreen.vue'
 
 import McpCentralStage from '@/renderer/screens/mcp/McpCentralStage.vue'
 import McpSideDrawer from '@/renderer/screens/mcp/McpSideDrawer.vue'
+import McpSideDock from '@/renderer/screens/mcp/McpSideDock.vue'
 
 import ChatMainScreen from '@/renderer/screens/chat/ChatScreen.vue'
 import ChatHistoryScreen from '@/renderer/screens/chat/ChatHistoryScreen.vue'
@@ -27,7 +28,8 @@ export { ErrorScreen }
 
 export const McpScreen: ScreenType = {
   centralStage: McpCentralStage,
-  sideDrawer: McpSideDrawer
+  sideDrawer: McpSideDrawer,
+  sideDock: McpSideDock
 }
 
 export const ChatScreen: ScreenType = {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useMcpStore } from '@/renderer/store/mcp'
+import { useMcpStore, getAllowedPrimitive } from '@/renderer/store/mcp'
 const mcpStore = useMcpStore()
 </script>
 
@@ -12,8 +12,23 @@ const mcpStore = useMcpStore()
       :value="key"
       link
       :ripple="false"
-      :title="key"
     >
+      <template #title>
+        <div class="d-flex align-center">
+          <v-list-item-title class="pt-1">
+            {{ key }}
+          </v-list-item-title>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="mt-1"
+            size="small"
+            color="grey-lighten-1"
+            icon="mdi-cog"
+            variant="text"
+            @click="console.log((mcpStore.selectedChips[key] = undefined))"
+          ></v-btn>
+        </div>
+      </template>
       <v-chip-group
         v-model="mcpStore.selectedChips[key]"
         :direction="mcpStore.selected[0] === key ? 'vertical' : undefined"
@@ -21,13 +36,12 @@ const mcpStore = useMcpStore()
         mandatory
       >
         <v-chip
-          v-for="(_primitive, name) in item"
+          v-for="name in getAllowedPrimitive(item)"
           :key="`${key}-${name}`"
           class="mr-1 my-1"
           label
           color="primary"
           size="small"
-          @click="console.log(key, name)"
         >
           {{ name }}
         </v-chip>

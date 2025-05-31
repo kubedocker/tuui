@@ -1,19 +1,46 @@
 import { ipcMain, shell, IpcMainEvent, dialog } from 'electron'
 import Constants from './utils/Constants'
-import { Client, capabilitySchemas } from './mcp/types'
+import { capabilitySchemas, ClientObj, ConfigObj } from './mcp/types'
 
 import { manageRequests } from './mcp/client'
 
 import { spawn } from 'child_process'
 
+import { initClients } from './mcp/init'
+import { disconnect } from './mcp/connection'
+
+const handlerRegistry = new Map<string, Function>()
+
 /*
  * IPC Communications
  * */
 export default class IPCs {
+  static clients: ClientObj[] = []
+  static currentFeatures: any[] = []
+
   static initialize(): void {
     // Get application version
     ipcMain.handle('msgRequestGetVersion', () => {
       return Constants.APP_VERSION
+    })
+
+    ipcMain.handle('msgInitAllMcpServers', async (event: IpcMainEvent, config: ConfigObj) => {
+      this.clients.forEach((client: ClientObj) => {
+        if (client.connection?.transport) {
+          disconnect(client.connection.transport)
+        }
+      })
+
+      IPCs.removeAllHandlers()
+
+      const newClients = await initClients(config)
+      const features = newClients.map((params) => {
+        return registerIpcHandlers(params)
+      })
+
+      IPCs.updateMCP(features)
+      this.clients = newClients
+      return features
     })
 
     // Open url via web browser
@@ -81,30 +108,49 @@ export default class IPCs {
     })
   }
 
-  static initializeMCP(features): void {
+  static updateMCP(newFeatures): void {
+    this.currentFeatures = newFeatures
+  }
+
+  static removeAllHandlers() {
+    for (const [eventName] of handlerRegistry) {
+      ipcMain.removeHandler(eventName)
+    }
+    console.log(`handlerRegistry clear: ${handlerRegistry.size}`)
+    handlerRegistry.clear()
+  }
+
+  static initializeMCP(initialFeatures): void {
+    this.currentFeatures = initialFeatures
     ipcMain.handle('list-clients', () => {
-      return features
+      return this.currentFeatures
     })
   }
 }
 
-export function registerIpcHandlers(
-  name: string,
-  client: Client,
-  capabilities: Record<string, any> | undefined
-) {
-  const feature: { [key: string]: any } = { name }
+export function registerIpcHandlers({ name, connection, configJson = {} }: ClientObj) {
+  const feature: { [key: string]: any } = {
+    name,
+    config: configJson
+  }
+
+  if (!connection) {
+    return feature
+  }
 
   const registerHandler = (method: string, schema: any) => {
     const eventName = `${name}-${method}`
     console.log(`IPC Main ${eventName}`)
-    ipcMain.handle(eventName, async (event, params) => {
-      return await manageRequests(client, `${method}`, schema, params)
-    })
+    const handler = async (_event: Electron.IpcMainInvokeEvent, params: any) => {
+      return await manageRequests(connection.client, `${method}`, schema, params)
+    }
+    ipcMain.handle(eventName, handler)
+    handlerRegistry.set(eventName, handler)
     return eventName
   }
 
   for (const [type, actions] of Object.entries(capabilitySchemas)) {
+    const capabilities = connection.client.getServerCapabilities()
     if (capabilities?.[type]) {
       feature[type] = {}
       for (const [action, schema] of Object.entries(actions)) {

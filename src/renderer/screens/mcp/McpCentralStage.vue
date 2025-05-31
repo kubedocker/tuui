@@ -43,13 +43,16 @@ const mcpNews = [
       <McpResourcePage :key="mcpStore.getSelected"></McpResourcePage>
     </div>
 
-    <div
-      v-else-if="
-        typeof mcpStore.getSelected.primitive === 'string' &&
-        mcpStore.getSelected.primitive.length > 0
-      "
-    >
+    <div v-else-if="mcpStore.getSelected.primitive === 'prompts'">
       <McpPromptPage :key="mcpStore.getSelected"></McpPromptPage>
+    </div>
+    <div v-else-if="mcpStore.getSelected.primitive === 'config'">
+      <v-textarea
+        variant="solo"
+        auto-grow
+        readonly
+        :model-value="mcpStore.getSelected.method"
+      ></v-textarea>
     </div>
   </div>
   <div v-else>

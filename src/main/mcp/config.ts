@@ -1,12 +1,26 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import { McpServersConfig } from './types'
-import { readFileSync } from 'fs'
 
-export function readConfig(configPath: string): McpServersConfig | null {
+export function loadConfigFile(configPath: string): McpServersConfig {
   try {
-    const config = readFileSync(configPath, 'utf8')
-    return JSON.parse(config)
-  } catch (error) {
-    console.error('Error reading config file:', error)
-    return null
+    const resolvedConfigPath = path.isAbsolute(configPath)
+      ? configPath
+      : path.resolve(process.cwd(), configPath)
+    if (!fs.existsSync(resolvedConfigPath)) {
+      throw new Error(`Config file not found: ${resolvedConfigPath}`)
+    }
+    const configContent = fs.readFileSync(resolvedConfigPath, 'utf8')
+    const parsedConfig = JSON.parse(configContent)
+    if (!parsedConfig.mcpServers) {
+      return {}
+    } else {
+      return parsedConfig.mcpServers
+    }
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      throw new Error(`Invalid JSON in config file: ${err.message}`)
+    }
+    throw err
   }
 }

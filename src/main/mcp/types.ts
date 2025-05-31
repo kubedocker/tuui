@@ -12,8 +12,11 @@ import {
   ListResourceTemplatesResultSchema
 } from '@modelcontextprotocol/sdk/types.js'
 
-export { Client } from '@modelcontextprotocol/sdk/client/index.js'
-export { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
+import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
+
+import { Client } from '@modelcontextprotocol/sdk/client/index.js'
+
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 export const capabilitySchemas = {
   tools: {
@@ -31,17 +34,23 @@ export const capabilitySchemas = {
   }
 }
 
-export interface ServerConfig {
-  command: string
-  // ---- Example ----
-  // command: string;
-  // args: string[];
-  // env: Record<string, string> | undefined;
-  [key: string]: any
+export type ServerConfig = StdioServerParameters
+
+export interface McpClientTransport {
+  client: Client
+  transport: StdioClientTransport
 }
 
 export interface McpServersConfig {
-  mcpServers: {
-    [key: string]: ServerConfig
-  }
+  [key: string]: ServerConfig
+}
+
+export type ConfigObj = {
+  [key: string]: ServerConfig
+}
+
+export type ClientObj = {
+  name: string
+  connection?: McpClientTransport
+  configJson?: Record<string, any>
 }
