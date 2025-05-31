@@ -71,14 +71,14 @@ const clearSampling = () => {
   return
 }
 
-const finishSampling = () => {
-  const latestResponse: any = samplingResults.value.at(-1)
+const finishSampling = (index: number) => {
+  const bestResponse: any = samplingResults.value[index]
   const response = {
     model: chatbotStore.model,
-    role: latestResponse?.role || 'assistant',
+    role: bestResponse?.role || 'assistant',
     content: {
       type: 'text',
-      text: latestResponse?.content || `No response from model ${chatbotStore.model}`
+      text: bestResponse?.content || `No response from model ${chatbotStore.model}`
     }
   }
   sendResponse(samplingChannel.value, response)
@@ -123,14 +123,38 @@ listenSampling(handleProgress)
           auto-grow
           :error-messages="jsonError"
         ></v-textarea>
-        <v-textarea
-          v-if="samplingResults.length > 0"
-          variant="solo"
-          :model-value="json2Str(samplingResults)"
-          outlined
-          readonly
-          auto-grow
-        ></v-textarea>
+        <v-data-iterator :items="samplingResults" :items-per-page="-1">
+          <template #default="{ items }">
+            <template v-for="(item, index) in items" :key="index">
+              <v-card>
+                <v-card-text>
+                  <v-textarea
+                    variant="plain"
+                    :model-value="json2Str(item.raw)"
+                    outlined
+                    readonly
+                    auto-grow
+                  ></v-textarea>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-icon-btn
+                    v-tooltip:start="$t('sampling.confirm')"
+                    icon="mdi-hand-okay"
+                    color="success"
+                    variant="plain"
+                    rounded="lg"
+                    @click="finishSampling(index)"
+                  ></v-icon-btn>
+                </v-card-actions>
+              </v-card>
+              <br />
+            </template>
+          </template>
+        </v-data-iterator>
+        <!-- <v-textarea v-if="samplingResults.length > 0" variant="solo" :model-value="json2Str(samplingResults)" outlined
+          readonly auto-grow></v-textarea> -->
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -151,15 +175,8 @@ listenSampling(handleProgress)
           rounded="lg"
           @click="tryCompletions"
         ></v-icon-btn>
-        <v-icon-btn
-          v-if="samplingResults.length > 0"
-          v-tooltip:top="$t('sampling.confirm')"
-          icon="mdi-hand-okay"
-          color="success"
-          variant="plain"
-          rounded="lg"
-          @click="finishSampling"
-        ></v-icon-btn>
+        <!-- <v-icon-btn v-if="samplingResults.length > 0" v-tooltip:top="$t('sampling.confirm')" icon="mdi-hand-okay"
+          color="success" variant="plain" rounded="lg" @click="finishSampling"></v-icon-btn> -->
       </v-card-actions>
     </v-card>
   </v-dialog>
