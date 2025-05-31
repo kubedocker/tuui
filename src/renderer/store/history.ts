@@ -24,9 +24,8 @@ export const useHistoryStore = defineStore('historyStore', {
   },
   getters: {
     getDate: () => {
-      const uuid: string = uuidv4()
       const date = new Date().toLocaleString('zh', { timeZoneName: 'short', hour12: false })
-      return `${date} ${uuid}`
+      return `${date} ${uuidv4()}`
     }
   },
   actions: {
