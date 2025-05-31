@@ -9,7 +9,8 @@ import {
   GetPromptResultSchema,
   ListResourcesResultSchema,
   ReadResourceResultSchema,
-  ListResourceTemplatesResultSchema
+  ListResourceTemplatesResultSchema,
+  CreateMessageResult
 } from '@modelcontextprotocol/sdk/types.js'
 
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
@@ -53,4 +54,8 @@ export type ClientObj = {
   name: string
   connection?: McpClientTransport
   configJson?: Record<string, any>
+}
+
+export interface IpcSamplingEvents {
+  renderListenSampling: (_message: CreateMessageResult) => void
 }

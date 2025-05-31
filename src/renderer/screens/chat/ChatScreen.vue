@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import ChatPage from '@/renderer/components/pages/ChatPage.vue'
 import { useMessageStore } from '@/renderer/store/message'
@@ -15,7 +15,8 @@ const { locale } = useI18n()
     :messages="messageStore.conversation"
     :language="locale"
     @request-delete="messageStore.deleteMessage"
-  />
+  >
+  </ChatPage>
   <v-container v-else>
     <v-row>
       <Vue3Lottie class="lottie-container" :animation-data="RobotJSON" />

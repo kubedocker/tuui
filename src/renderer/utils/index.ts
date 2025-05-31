@@ -9,8 +9,12 @@ export default class Utils {
     return window.mainApi.invoke('msgGetApiToken', cli)
   }
 
+  static async listenSampling(callback: any): Promise<any> {
+    return window.mainApi.on('renderListenSampling', callback)
+  }
+
   static async listenStdioProgress(progress: any): Promise<any> {
-    return window.mainApi.on('renderListenStdioProgress', progress)
+    return window.mainApi.once('renderListenStdioProgress', progress)
   }
 
   static async removeListenStdioProgress(progress: any): Promise<any> {
@@ -19,6 +23,10 @@ export default class Utils {
 
   static async openExternal(url: string): Promise<void> {
     await window.mainApi.send('msgOpenExternalLink', url)
+  }
+
+  static async sendResponse(channel: string, response: any): Promise<void> {
+    await window.mainApi.send(channel, response)
   }
 
   static async initAllMcpServers(configs: MCPAPI): Promise<any> {
@@ -40,5 +48,7 @@ export const {
   getApiToken,
   initAllMcpServers,
   listenStdioProgress,
-  removeListenStdioProgress
+  removeListenStdioProgress,
+  listenSampling,
+  sendResponse
 } = Utils

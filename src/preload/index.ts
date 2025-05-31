@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import { AsyncFunction, MCPAPI } from './types'
+import type { AsyncFunction, MCPAPI } from './types'
 
 // Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
 const mainAvailChannels: string[] = [
@@ -9,7 +9,9 @@ const mainAvailChannels: string[] = [
   'msgGetApiToken',
   'msgInitAllMcpServers'
 ]
-const rendererAvailChannels: string[] = ['renderListenStdioProgress']
+const rendererAvailChannels: string[] = ['renderListenStdioProgress', 'renderListenSampling']
+
+const rendererResponseChannel = 'renderResponse'
 
 type CLIENT = {
   name: string
@@ -20,7 +22,7 @@ type CLIENT = {
 
 contextBridge.exposeInMainWorld('mainApi', {
   send: (channel: string, ...data: any[]): void => {
-    if (mainAvailChannels.includes(channel)) {
+    if (mainAvailChannels.includes(channel) || channel.startsWith(rendererResponseChannel)) {
       ipcRenderer.send.apply(null, [channel, ...data])
       if (process.env.NODE_ENV === 'development') {
         console.log({ type: 'send', channel, request: data })

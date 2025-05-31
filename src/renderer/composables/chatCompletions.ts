@@ -2,6 +2,7 @@ import { useMessageStore } from '@/renderer/store/message'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
 import { useAgentStore } from '@/renderer/store/agent'
+import { useMcpStore } from '@/renderer/store/mcp'
 
 type ChatCompletionMessage = {
   content: string
@@ -37,10 +38,7 @@ export const isEmptyTools = (tools: any): boolean => {
   }
 }
 
-const promptMessage = (conversation: string) => {
-  const agentStore = useAgentStore()
-  const systemPrompt = agentStore.getPrompt()
-
+const promptMessage = (conversation: string, systemPrompt: string | null) => {
   if (systemPrompt) {
     return [{ content: systemPrompt, role: 'system' }, ...conversation]
   } else {
@@ -48,10 +46,12 @@ const promptMessage = (conversation: string) => {
   }
 }
 
-export const createCompletion = async (rawconversation) => {
+export const createCompletion = async (rawconversation, sampling: any = null) => {
   const snackbarStore = useSnackbarStore()
+
   const messageStore = useMessageStore()
-  // const mcpStore = useMcpStore()
+
+  const mcpStore = useMcpStore()
   const agentStore = useAgentStore()
 
   const allChatbotStore = useChatbotStore()
@@ -87,27 +87,45 @@ export const createCompletion = async (rawconversation) => {
       headers.Authorization = `${chatbotStore.authPrefix} ${chatbotStore.apiKey}`
 
     const body: any = {
-      messages: promptMessage(conversation),
       model: chatbotStore.model,
       stream: chatbotStore.stream
     }
 
-    if (chatbotStore.maxTokensValue) {
-      body[chatbotStore.maxTokensType] = parseInt(chatbotStore.maxTokensValue)
-    }
+    let target
 
-    if (chatbotStore.temperature) {
-      body.temperature = parseFloat(chatbotStore.temperature)
-    }
+    if (!sampling) {
+      target = messageStore.conversation
 
-    if (chatbotStore.topP) {
-      body.top_p = parseFloat(chatbotStore.topP)
-    }
+      body.messages = promptMessage(conversation, agentStore.getPrompt())
 
-    if (chatbotStore.mcp) {
-      const tools = await agentStore.getTools()
-      if (tools && tools.length > 0) {
-        body.tools = tools
+      if (chatbotStore.maxTokensValue) {
+        body[chatbotStore.maxTokensType] = parseInt(chatbotStore.maxTokensValue)
+      }
+
+      if (chatbotStore.temperature) {
+        body.temperature = parseFloat(chatbotStore.temperature)
+      }
+
+      if (chatbotStore.topP) {
+        body.top_p = parseFloat(chatbotStore.topP)
+      }
+
+      if (chatbotStore.mcp) {
+        const tools = await agentStore.getTools()
+        if (tools && tools.length > 0) {
+          body.tools = tools
+        }
+      }
+    } else {
+      target = sampling.target
+      const msg = rawconversation.map((item) => ({
+        role: item.role,
+        content: [mcpStore.convertItem(item.content)]
+      }))
+      body.messages = promptMessage(msg, sampling.systemPrompt)
+      body.temperature = sampling.temperature
+      if (sampling.maxTokens) {
+        body[chatbotStore.maxTokensType] = parseInt(sampling.maxTokens)
       }
     }
 
@@ -145,7 +163,7 @@ export const createCompletion = async (rawconversation) => {
     }
 
     // Add the bot message
-    messageStore.conversation.push({
+    target.push({
       content: '',
       reasoning_content: '',
       tool_calls: [],
@@ -155,7 +173,7 @@ export const createCompletion = async (rawconversation) => {
     const buffer = ''
 
     // Read the stream
-    await read(reader, messageStore.conversation.at(-1), buffer, chatbotStore.stream)
+    await read(reader, target.at(-1), buffer, chatbotStore.stream)
   } catch (error: any) {
     snackbarStore.showErrorMessage(error?.message)
   } finally {

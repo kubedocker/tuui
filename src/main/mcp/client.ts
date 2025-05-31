@@ -5,6 +5,8 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { ServerConfig, McpClientTransport } from './types'
 import { connect } from './connection'
 
+import { sendToRenderer } from '../index'
+
 export async function initializeClient(
   name: string,
   serverConfig: ServerConfig,
@@ -55,15 +57,9 @@ async function initializeStdioClient(
 
   client.setRequestHandler(CreateMessageRequestSchema, async (request) => {
     console.log('Sampling request received:\n', request)
-    return {
-      model: 'test-sampling-model',
-      stopReason: 'endTurn',
-      role: 'assistant',
-      content: {
-        type: 'text',
-        text: 'This is a test message from the client used for sampling the LLM. If you receive this message, please stop further attempts, as the sampling test has been successful.'
-      }
-    }
+    const response = await sendToRenderer('renderListenSampling', request)
+    console.log(response)
+    return response
   })
 
   return { client, transport }

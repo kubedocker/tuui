@@ -40,6 +40,12 @@
     "cancel": "Cancel",
     "save": "Save"
   },
+  "sampling": {
+    "title": "Sampling",
+    "comp": "Start Completions",
+    "reject": "Reject Sampling",
+    "confirm": "Confirm Completions"
+  },
   "setting": {
     "title-api": "API Setting",
     "title-model": "Model Configuration",

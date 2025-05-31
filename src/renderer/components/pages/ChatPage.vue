@@ -2,6 +2,7 @@
 import { computed, reactive } from 'vue'
 import ImgDialog from '../common/ImgDialog.vue'
 import ChatCard from '../common/ChatCard.vue'
+import SamplingCard from '../common/SamplingCard.vue'
 import { isEmptyTools } from '@/renderer/composables/chatCompletions'
 import { MdPreview, config } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
@@ -110,6 +111,7 @@ const groupMessages = computed<Group[]>(() => {
 </script>
 
 <template>
+  <SamplingCard></SamplingCard>
   <div v-for="group in groupMessages" :key="group.index">
     <!-- User Messages -->
     <div v-if="group.group === 'user'">

@@ -1,6 +1,11 @@
 import { app, shell, WebContents, RenderProcessGoneDetails } from 'electron'
+import { v4 as uuidv4 } from 'uuid'
 import Constants from './utils/Constants'
 import { createErrorWindow, createMainWindow } from './MainRunner'
+
+import { IpcSamplingEvents } from './mcp/types'
+
+import { responseToRenderer } from './IPCs'
 
 let mainWindow
 let errorWindow
@@ -78,3 +83,36 @@ app.on(
 process.on('uncaughtException', () => {
   errorWindow = createErrorWindow(errorWindow, mainWindow)
 })
+
+// export function sendToRenderer<T extends keyof IpcSamplingEvents>(
+//   channel: T,
+//   ...args: Parameters<IpcSamplingEvents[T]>
+// ) {
+//   if (mainWindow && !mainWindow.isDestroyed()) {
+//     mainWindow.webContents.send(channel, ...args);
+
+//   }
+// }
+
+const rendererResponseChannel = 'renderResponse'
+
+export function sendToRenderer<T extends keyof IpcSamplingEvents>(
+  channel: T,
+  ...args: Parameters<IpcSamplingEvents[T]>
+): Promise<any> {
+  return new Promise((resolve) => {
+    if (!mainWindow || mainWindow.isDestroyed()) {
+      resolve(null)
+      return
+    }
+
+    const responseChannel = `${rendererResponseChannel}-${uuidv4()}`
+
+    responseToRenderer(responseChannel, resolve)
+
+    mainWindow.webContents.send(channel, {
+      args,
+      responseChannel
+    })
+  })
+}

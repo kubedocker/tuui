@@ -144,6 +144,12 @@ export default class IPCs {
   }
 }
 
+export function responseToRenderer(responseChannel, resolve) {
+  ipcMain.once(responseChannel, (event, response) => {
+    resolve(response)
+  })
+}
+
 export function registerIpcHandlers({ name, connection, configJson = {} }: ClientObj) {
   const feature: { [key: string]: any } = {
     name,

@@ -40,6 +40,12 @@
     "title": "服务端提示模板",
     "get": "获取"
   },
+  "sampling": {
+    "title": "采样",
+    "comp": "开始采样",
+    "reject": "拒绝采样",
+    "confirm": "确认生成"
+  },
   "setting": {
     "title-api": "API 设置",
     "title-model": "模型参数",
