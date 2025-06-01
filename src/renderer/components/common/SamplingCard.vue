@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { listenSampling, sendResponse } from '@/renderer/utils'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
+import { MessageEntry } from '@/renderer/store/history'
 import { createCompletion } from '@/renderer/composables/chatCompletions'
 
 const snackbarStore = useSnackbarStore()
@@ -15,7 +16,7 @@ const samplingDialog = ref(false)
 
 const samplingParams = ref({})
 
-const samplingResults = ref([])
+const samplingResults = ref<MessageEntry[]>([])
 
 const samplingChannel = ref('')
 
@@ -130,7 +131,7 @@ listenSampling(handleProgress)
                 <v-card-text>
                   <v-textarea
                     variant="plain"
-                    :model-value="json2Str(item.raw)"
+                    :model-value="item.raw.content"
                     outlined
                     readonly
                     auto-grow

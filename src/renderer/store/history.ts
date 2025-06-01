@@ -3,7 +3,7 @@ import localForage from 'localforage'
 import { v4 as uuidv4 } from 'uuid'
 import { useMessageStore } from '@/renderer/store/message'
 
-type MessageEntry = {
+export type MessageEntry = {
   role: string
   content: any
   reasoning_content?: string

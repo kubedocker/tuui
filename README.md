@@ -1,6 +1,6 @@
-# TUUI
+# TUUI - Tool Unitary User Interface
 
-#### A Tool-Unified User Interface accelerating AI tool integration via MCP (Model Context Protocol) and orchestrating cross-vendor LLM APIs
+#### TUUI is a tool unitary utility integration that accelerates AI tool adoption through MCP (Model Context Protocol) and enables orchestration of cross-vendor LLM APIs.
 
 ## :bulb: Introduction
 
@@ -69,6 +69,10 @@ Once you modify or import the LLM configuration, it will be stored in your local
 ### LLM API setting
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/4.png)
+
+### Selectable Sampling
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/8.png)
 
 ### Native devtools
 
