@@ -14,8 +14,8 @@ const vitePressI18nConfigs: VitePressI18nOptions = {
   rootLocale: defaultLocale,
   searchProvider: 'local',
   description: {
-    en: 'TUUI is a tool-unified user interface desktop application designed for AI Agentic systems, leveraging the Model Context Protocol.',
-    zhHans: 'TUUI 是一款为 AI 代理系统设计的工具统一用户界面桌面应用程序，利用模型上下文协议.'
+    en: 'A desktop application designed for AI Agentic systems, leveraging the Model Context Protocol.',
+    zhHans: '一款为 AI 代理系统设计的工具统一用户界面桌面应用程序，利用模型上下文协议.'
   },
   themeConfig: {
     en: {

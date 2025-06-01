@@ -2,7 +2,7 @@
 layout: home
 
 title: TUUI
-titleTemplate: Tool-Unified UI
+titleTemplate: Tool Unitary UI
 
 hero:
   name: TUUI
