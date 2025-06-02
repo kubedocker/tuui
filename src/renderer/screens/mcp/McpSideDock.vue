@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { initAllMcpServers } from '@/renderer/utils'
+import { initAllMcpServers, windowReload } from '@/renderer/utils'
 import { useMcpStore } from '@/renderer/store/mcp'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 const snackbarStore = useSnackbarStore()
@@ -19,7 +19,7 @@ async function activeAllMcpServers() {
     if (result.status == 'error') {
       snackbarStore.showErrorMessage(result.error.toString())
     } else {
-      location.reload()
+      windowReload()
     }
   } finally {
     isLoading.value = false

@@ -1,4 +1,4 @@
-import type { MCPAPI } from '../../preload/types'
+import type { MCPAPI } from '@/preload/types'
 
 export default class Utils {
   static getCurrentLocale(): string {
@@ -23,6 +23,10 @@ export default class Utils {
 
   static async openExternal(url: string): Promise<void> {
     await window.mainApi.send('msgOpenExternalLink', url)
+  }
+
+  static async windowReload(): Promise<void> {
+    await window.mainApi.send('msgWindowReload')
   }
 
   static async sendResponse(channel: string, response: any): Promise<void> {
@@ -50,5 +54,6 @@ export const {
   listenStdioProgress,
   removeListenStdioProgress,
   listenSampling,
-  sendResponse
+  sendResponse,
+  windowReload
 } = Utils

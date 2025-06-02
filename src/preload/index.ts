@@ -7,7 +7,8 @@ const mainAvailChannels: string[] = [
   'msgOpenExternalLink',
   'msgOpenFile',
   'msgGetApiToken',
-  'msgInitAllMcpServers'
+  'msgInitAllMcpServers',
+  'msgWindowReload'
 ]
 const rendererAvailChannels: string[] = ['renderListenStdioProgress', 'renderListenSampling']
 

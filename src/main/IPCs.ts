@@ -1,4 +1,4 @@
-import { ipcMain, shell, IpcMainEvent, dialog } from 'electron'
+import { ipcMain, shell, IpcMainEvent, dialog, BrowserWindow } from 'electron'
 import Constants from './utils/Constants'
 import { capabilitySchemas, ClientObj, ConfigObj } from './mcp/types'
 
@@ -62,6 +62,10 @@ export default class IPCs {
     // Open url via web browser
     ipcMain.on('msgOpenExternalLink', async (event: IpcMainEvent, url: string) => {
       await shell.openExternal(url)
+    })
+
+    ipcMain.on('msgWindowReload', async (event: IpcMainEvent) => {
+      BrowserWindow.fromWebContents(event.sender).reload()
     })
 
     ipcMain.handle('msgGetApiToken', async (event, cli) => {

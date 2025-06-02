@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { MCPAPI } from '../../preload/types'
+import type { MCPAPI } from '@/preload/types'
 
 type McpPrimitiveType = 'tools' | 'resources' | 'prompts' | 'config'
 type AllowedPrimitive = Exclude<McpPrimitiveType, 'config'>
