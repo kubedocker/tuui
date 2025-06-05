@@ -1,9 +1,6 @@
 # TUUI - Tool Unitary User Interface
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/AI-QL/tuui)
-[![](https://img.shields.io/badge/Vue3-brightgreen.svg)](https://vuejs.org)
-[![](https://img.shields.io/badge/Vuetify-blue.svg)](https://vuetifyjs.com)
-[![LICENSE](https://img.shields.io/github/license/AI-QL/tuui)](https://github.com/AI-QL/tuui/blob/main/LICENSE)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/AI-QL/tuui) [![](https://img.shields.io/badge/Vue3-brightgreen.svg)](https://vuejs.org) [![](https://img.shields.io/badge/Vuetify-blue.svg)](https://vuetifyjs.com) [![LICENSE](https://img.shields.io/github/license/AI-QL/tuui)](https://github.com/AI-QL/tuui/blob/main/LICENSE)
 
 #### TUUI is a tool unitary utility integration that accelerates AI tool adoption through MCP (Model Context Protocol) and enables orchestration of cross-vendor LLM APIs.
 

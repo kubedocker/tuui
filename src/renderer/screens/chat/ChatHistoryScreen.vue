@@ -18,7 +18,7 @@ function parseContent(content) {
 }
 </script>
 <template>
-  <v-list nav>
+  <v-list v-model:selected="historyStore.selected" nav>
     <v-list-item
       v-for="(item, index) in historyStore.conversation"
       :key="item.id"

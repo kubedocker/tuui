@@ -3,6 +3,8 @@ import localForage from 'localforage'
 import { v4 as uuidv4 } from 'uuid'
 import { useMessageStore } from '@/renderer/store/message'
 
+type ConversationID = string
+
 export type MessageEntry = {
   role: string
   content: any
@@ -10,25 +12,26 @@ export type MessageEntry = {
   [key: string]: any
 }
 
-interface ConversationEntry {
-  id: string
+type ConversationEntry = {
+  id: ConversationID
   messages: MessageEntry[]
 }
 
 export const useHistoryStore = defineStore('historyStore', {
   state: () => ({
+    selected: undefined as ConversationID[] | undefined,
     conversation: [] as ConversationEntry[]
   }),
   persist: {
+    include: ['conversation'],
     storage: localForage
   },
-  getters: {
-    getDate: () => {
+  getters: {},
+  actions: {
+    getDate() {
       const date = new Date().toLocaleString('zh', { timeZoneName: 'short', hour12: false })
       return `${date} ${uuidv4()}`
-    }
-  },
-  actions: {
+    },
     resetState() {
       this.$reset()
     },
@@ -36,10 +39,12 @@ export const useHistoryStore = defineStore('historyStore', {
       this.conversation.splice(index, 1)
     },
     init(conversation) {
+      const newId = this.getDate()
       this.conversation.unshift({
-        id: this.getDate,
+        id: newId,
         messages: conversation
       })
+      this.selected = [newId]
     },
     replace(id) {
       this.deleteById(id)
@@ -48,9 +53,7 @@ export const useHistoryStore = defineStore('historyStore', {
     },
     select(id) {
       const messageStore = useMessageStore()
-      //   settingStore.configHistory = false
       messageStore.conversation = this.conversation[id].messages
-      // this.replace(id)
     },
     getColor(id) {
       const targetElement = this.conversation[id]?.messages.find(
