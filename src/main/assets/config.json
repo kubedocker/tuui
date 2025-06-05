@@ -10,6 +10,10 @@
       "env": {
         "TEST_ENV": "USED_FOR_TEST"
       }
+    },
+    "antvis-chart": {
+      "command": "npx",
+      "args": ["-y", "@antv/mcp-server-chart"]
     }
   }
 }

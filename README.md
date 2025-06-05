@@ -76,6 +76,9 @@ Once you modify or import the LLM configuration, it will be stored in your local
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/8.png)
 
+### Data insights
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/9.png)
+
 ### Native devtools
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/5.png)
