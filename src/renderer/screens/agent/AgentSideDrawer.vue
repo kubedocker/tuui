@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useAgentStore } from '@/renderer/store/agent'
+import { useMcpStore } from '@/renderer/store/mcp'
+const mcpStore = useMcpStore()
 const agentStore = useAgentStore()
 
 function handleDelete(index, event) {
@@ -9,7 +11,7 @@ function handleDelete(index, event) {
 </script>
 
 <template>
-  <v-list v-model:selected="agentStore.revised" nav mandatory>
+  <v-list :key="mcpStore.version" v-model:selected="agentStore.revised" nav mandatory>
     <v-list-item
       v-for="(item, index) in agentStore.agents"
       :key="index"
@@ -23,7 +25,7 @@ function handleDelete(index, event) {
       <template #prepend>
         <v-badge
           class="mr-n3"
-          color="primary"
+          :color="agentStore.hasTools ? 'primary' : 'grey'"
           :content="item.selectedNode.length"
           inline
           :max="99"

@@ -8,7 +8,8 @@
     "error": "Unknown Error"
   },
   "mcp": {
-    "init": "Init MCP Servers"
+    "init": "Init MCP Servers",
+    "updated": "MCP Severs Updated"
   },
   "menu": {
     "change-theme": "Change Theme",
@@ -35,6 +36,7 @@
     "config": "Agent Config",
     "prompt": "System Prompt",
     "tools": "List of tools",
+    "no-tools": "No MCP servers with tools was connected.",
     "all": "All tools",
     "selected": "Selected Tools",
     "cancel": "Cancel",

@@ -8,15 +8,12 @@ const mcpStore = useMcpStore()
 const agentStore = useAgentStore()
 const { t } = useI18n()
 
-const allTools = ref([])
-// const selectedTree = ref([])
-
 const selectedTree = computed({
   get() {
     return agentStore.getRevised?.selectedNode
   },
   set(value) {
-    console.log(value)
+    console.log('Selected tools', value)
     if (agentStore.getRevised) {
       agentStore.getRevised.selectedNode = value
     }
@@ -31,43 +28,49 @@ const items = ref([
   }
 ])
 
-watch(allTools, (val) => {
-  console.log('Tool list updated')
-  const flatChildren = []
-  const children = val.map((type) => ({
-    id: type.server,
-    name: type.server,
-    children: type.tools
-      ? type.tools.map((obj) => {
-          const id = agentStore.genId(type.server, obj.name)
-          const unit = {
-            id: id,
-            server: type.server,
-            name: obj.name
-          }
-          flatChildren.push(id)
-          return unit
-        })
-      : []
-  }))
-  const rootObj = items.value[0]
-  rootObj.children = children
-  items.value = [rootObj]
+watch(
+  () => agentStore.allTools,
+  (val) => {
+    if (!agentStore.hasTools) {
+      return
+    }
+    console.log('Tools Updated', val)
+    const flatChildren = []
+    const children = val.map((type) => ({
+      id: type.server,
+      name: type.server,
+      children: type.tools
+        ? type.tools.map((obj) => {
+            const id = agentStore.genId(type.server, obj.name)
+            const unit = {
+              id: id,
+              server: type.server,
+              name: obj.name
+            }
+            flatChildren.push(id)
+            return unit
+          })
+        : []
+    }))
+    const rootObj = items.value[0]
+    rootObj.children = children
+    items.value = [rootObj]
 
-  const newSelectedNode = agentStore.getRevised.selectedNode.filter((node) => {
-    return flatChildren.includes(node)
-  })
-  agentStore.getRevised.selectedNode = newSelectedNode
-})
+    agentStore.agents.forEach((agent) => {
+      const newSelectedNode = agent.selectedNode.filter((node) => {
+        return flatChildren.includes(node)
+      })
+      agent.selectedNode = newSelectedNode
+    })
+  }
+)
 
 onMounted(() => {
   load()
-  console.log(selectedTree)
-  console.log(items.value)
 })
 
 function load() {
-  const mcpServers = mcpStore.getServers
+  const mcpServers = mcpStore.getServers()
   const mcpKeys = Object.keys(mcpServers)
   // Create an array of Promises
   const toolPromises = mcpKeys.map((key) => {
@@ -82,7 +85,7 @@ function load() {
       // If toolsListFunction is not a function, return an object with content as null
       return Promise.resolve({
         name: key,
-        content: null
+        tools: []
       })
     }
   })
@@ -92,7 +95,8 @@ function load() {
   // Return a Promise that resolves when all toolPromises are resolved
 
   return Promise.all(toolPromises).then((data) => {
-    allTools.value = data
+    console.log(data)
+    agentStore.allTools = data
   })
 }
 
@@ -112,6 +116,7 @@ function handleNameUpdate() {
 </script>
 
 <template>
+  <!-- <v-btn @click="console.log(agentStore.allTools)"></v-btn> -->
   <div v-if="agentStore.getRevised" :key="agentStore.getRevised">
     <v-card :title="$t('agent.config')">
       <v-divider></v-divider>
@@ -150,7 +155,17 @@ function handleNameUpdate() {
       </template>
     </v-confirm-edit>
 
-    <v-card v-if="selectedTree" class="mt-4" :title="$t('agent.tools')">
+    <v-alert
+      v-if="!agentStore.hasTools"
+      border="top"
+      type="warning"
+      variant="outlined"
+      prominent
+      class="mt-4"
+    >
+      {{ $t('agent.no-tools') }}
+    </v-alert>
+    <v-card v-else class="mt-4" :title="$t('agent.tools')">
       <v-row dense>
         <v-divider></v-divider>
         <v-treeview
@@ -179,42 +194,34 @@ function handleNameUpdate() {
           </div>
           <div class="d-flex flex-wrap ga-1">
             <v-scroll-x-transition group hide-on-leave>
-              <v-chip
-                v-for="selection in selectedTree"
-                :key="selection"
-                :text="agentStore.getId(selection).name"
-                color="grey"
-                size="small"
-                border
-                closable
-                label
-                @click:close="onClickClose(selection)"
-              >
-                <template #prepend>
-                  <v-avatar
-                    :text="agentStore.getAbbr(agentStore.getId(selection).server)"
-                    :color="agentStore.getColor(selection)"
-                    start
-                    variant="plain"
-                  >
-                  </v-avatar>
-                </template>
-              </v-chip>
+              <div v-for="(selection, index) in selectedTree" :key="index">
+                <v-chip
+                  v-if="selection"
+                  :key="selection"
+                  :text="agentStore.getId(selection).name"
+                  color="grey"
+                  size="small"
+                  border
+                  closable
+                  label
+                  @click="console.log(selection, index)"
+                  @click:close="onClickClose(selection)"
+                >
+                  <template #prepend>
+                    <v-avatar
+                      :text="agentStore.getAbbr(agentStore.getId(selection).server)"
+                      :color="agentStore.getColor(selection)"
+                      start
+                      variant="plain"
+                    >
+                    </v-avatar>
+                  </template>
+                </v-chip>
+              </div>
             </v-scroll-x-transition>
           </div>
         </v-card-text>
       </v-row>
-
-      <!-- <v-divider></v-divider>
-
-    <template v-slot:actions>
-      <v-btn text="Reset" @click="selectedTree = []"></v-btn>
-
-      <v-spacer></v-spacer>
-
-      <v-btn append-icon="mdi-content-save" color="surface-light" text="Save" variant="flat" border></v-btn>
-      <v-btn @click="console.log(agentStore.selected)"></v-btn>
-    </template> -->
     </v-card>
   </div>
 </template>

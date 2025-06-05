@@ -16,6 +16,7 @@ export const AGENTS_DEFAULTS = {
 
 export interface AgentStoreState {
   agents: AgentConfig[]
+  allTools: any[]
   selected: number | null
   revised: number[]
 }
@@ -23,13 +24,17 @@ export interface AgentStoreState {
 export const useAgentStore = defineStore('agentStore', {
   state: (): AgentStoreState => ({
     agents: [{ ...AGENTS_DEFAULTS }],
-    revised: [0],
-    selected: null
+    allTools: [],
+    revised: [0], // Selection in Agent Config Page
+    selected: null // Selection in Chat Config Page
   }),
   persist: {
-    exclude: ['revised']
+    exclude: ['revised', 'allTools']
   },
   getters: {
+    hasTools(state) {
+      return state.allTools.some((obj) => obj.tools.length > 0)
+    },
     getRevised(state) {
       const agent = state.revised[0]
       if (Number.isInteger(agent)) {
@@ -72,7 +77,6 @@ export const useAgentStore = defineStore('agentStore', {
       const b = (hash >> 16) & 0xff
 
       const color = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).padStart(6, '0')}`
-      console.log(color)
       return color
     },
     getAbbr(input: string) {
@@ -94,6 +98,7 @@ export const useAgentStore = defineStore('agentStore', {
         if (selectedTools.length === 0) {
           return []
         } else {
+          console.log('Current selected tools: ', selectedTools)
           const parsedToolServers: string[] = []
 
           const parsedToolNames = selectedTools.map((serverName) => {
@@ -117,6 +122,8 @@ export const useAgentStore = defineStore('agentStore', {
           const filteredTools = listedTools.filter((tool: FunctionType) =>
             parsedToolNames.includes(tool.function.name)
           )
+
+          console.log('Current valid tools: ', listedTools, filteredTools)
 
           return filteredTools
         }

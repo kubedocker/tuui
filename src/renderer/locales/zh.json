@@ -8,7 +8,8 @@
     "error": "未知错误"
   },
   "mcp": {
-    "init": "初始化 MCP 服务端"
+    "init": "初始化 MCP 服务端",
+    "updated": "MCP 服务端已更新"
   },
   "menu": {
     "change-theme": "改变主题",
@@ -31,6 +32,7 @@
     "config": "智能体配置",
     "prompt": "提示指令",
     "tools": "工具列表",
+    "no-tools": "尚未连接包含工具的 MCP 服务端",
     "all": "全部工具",
     "selected": "已选择工具",
     "cancel": "取消",

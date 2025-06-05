@@ -47,19 +47,19 @@ watchEffect(() => {
       variant="text"
       base-color="white"
     >
-      <v-btn data-testid="btn-menu-mcp" @click="handleRoute('/')">
+      <v-btn :key="0" data-testid="btn-menu-mcp" @click="handleRoute('/')">
         <v-icon>mdi-view-dashboard</v-icon>
       </v-btn>
 
-      <v-btn data-testid="btn-menu-chat" @click="handleRoute('/chat')">
+      <v-btn :key="1" data-testid="btn-menu-chat" @click="handleRoute('/chat')">
         <v-icon>mdi-comment-text-outline</v-icon>
       </v-btn>
 
-      <v-btn data-testid="btn-menu-agent" @click="handleRoute('/agent')">
+      <v-btn :key="2" data-testid="btn-menu-agent" @click="handleRoute('/agent')">
         <v-icon>mdi-account-multiple</v-icon>
       </v-btn>
 
-      <v-btn data-testid="btn-menu-setting" @click="handleRoute('/setting')">
+      <v-btn :key="3" data-testid="btn-menu-setting" @click="handleRoute('/setting')">
         <v-icon>mdi-cog-transfer-outline</v-icon>
       </v-btn>
     </v-btn-toggle>
@@ -76,7 +76,7 @@ watchEffect(() => {
         </v-tooltip>
       </v-btn> -->
       <!-- @click="mcpStore.listTools().then((tools) => console.log(tools))" -->
-      <v-btn icon="mdi-clipboard-text" size="small" @click="console.log(mcpStore.getServers)">
+      <v-btn icon="mdi-clipboard-text" size="small" @click="console.log(mcpStore.getServers())">
       </v-btn>
     </template>
   </v-app-bar>

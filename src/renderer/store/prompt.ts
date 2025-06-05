@@ -50,7 +50,7 @@ export const usePromptStore = defineStore('promptStore', {
     },
     fetchAllPrompts: async function () {
       const mcpStore = useMcpStore()
-      const mcpServers = mcpStore.getServers
+      const mcpServers = mcpStore.getServers()
       if (!mcpServers) {
         return []
       }
@@ -73,7 +73,7 @@ export const usePromptStore = defineStore('promptStore', {
     },
     fetchSelect: async function () {
       const mcpStore = useMcpStore()
-      const mcpServers = mcpStore.getServers
+      const mcpServers = mcpStore.getServers()
       const getFun = mcpServers[this.promptSelect.title]?.prompts?.get
       if (!getFun) {
         return []

@@ -4,9 +4,9 @@ const mcpStore = useMcpStore()
 </script>
 
 <template>
-  <v-list v-model:selected="mcpStore.selected" nav mandatory>
+  <v-list :key="mcpStore.version" v-model:selected="mcpStore.selected" nav mandatory>
     <v-list-item
-      v-for="(item, key) in mcpStore.getServers"
+      v-for="(item, key) in mcpStore.getServers()"
       :key="key"
       two-line
       :value="key"
@@ -31,7 +31,7 @@ const mcpStore = useMcpStore()
       </template>
       <v-chip-group
         v-model="mcpStore.selectedChips[key]"
-        :direction="mcpStore.selected[0] === key ? 'vertical' : undefined"
+        :direction="mcpStore.selected?.[0] === key ? 'vertical' : undefined"
         selected-class="text-primary"
         mandatory
       >
