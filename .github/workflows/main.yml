@@ -28,4 +28,5 @@ jobs:                                          # 作业
         uses: actions/upload-artifact@v4       # 上传构建产物
         with:
           name: build-artifacts
-          path: release/
+          path: release/**/tuui*.*
+          compression-level: 0
