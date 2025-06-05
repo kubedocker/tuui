@@ -113,28 +113,18 @@ export const useMessageStore = defineStore('messageStore', {
 
           const toolCall = toolCalls[index]
 
+          let result
+
           try {
-            const result = await mcpStore.callTool(
-              toolCall.function.name,
-              toolCall.function.arguments
-            )
-
+            result = await mcpStore.callTool(toolCall.function.name, toolCall.function.arguments)
             console.log(result)
-
-            if (result.content) {
-              this.contentConvert(result.content, toolCall.id).forEach((item) => {
-                this.conversation.push(item)
-              })
-              toolCalled = true
-            }
-
-            await callNextTool(toolCalls, index + 1)
           } catch (error) {
-            const result = mcpStore.packReturn(`Error calling tool: ${error}`)
-            this.conversation.push({
-              role: 'tool',
-              content: result.content,
-              tool_call_id: toolCall.id
+            result = mcpStore.packReturn(`Error calling tool: ${error}`)
+          }
+
+          if (result.content) {
+            this.contentConvert(result.content, toolCall.id).forEach((item) => {
+              this.conversation.push(item)
             })
             toolCalled = true
           }

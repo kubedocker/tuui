@@ -1,21 +1,21 @@
 <script setup lang="tsx">
 import { useI18n } from 'vue-i18n'
 import { useLocaleStore } from '@/renderer/store/locale'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import 'iconify-icon'
 
-const { locale, availableLocales } = useI18n()
+const { locale } = useI18n()
 const localeStore = useLocaleStore()
 
-const languages = ref(['en'])
-
 onMounted((): void => {
-  console.log(locale)
-  languages.value = availableLocales
+  if (localeStore.selected) {
+    locale.value = localeStore.selected
+  }
 })
 
 const handleChangeLanguage = (val): void => {
   locale.value = val
+  localeStore.selected = val
 }
 </script>
 <template>

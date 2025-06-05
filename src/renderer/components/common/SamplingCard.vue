@@ -130,8 +130,18 @@ listenSampling(handleProgress)
               <v-card>
                 <v-card-text>
                   <v-textarea
+                    v-if="item.raw.reasoning_content"
+                    class="conversation-area text-disabled font-italic"
                     variant="plain"
-                    :model-value="item.raw.content"
+                    :model-value="item.raw.reasoning_content.trim()"
+                    outlined
+                    readonly
+                    auto-grow
+                  ></v-textarea>
+                  <v-textarea
+                    v-if="item.raw.content"
+                    variant="plain"
+                    :model-value="item.raw.content.trim()"
                     outlined
                     readonly
                     auto-grow

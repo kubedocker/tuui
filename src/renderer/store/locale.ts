@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 
 export const useLocaleStore = defineStore('localeStore', {
   state: () => ({
+    selected: null,
     list: [
       { title: 'English', value: 'en', name: 'united-states' },
       { title: '简体中文', value: 'zh', name: 'china' }
@@ -10,6 +11,9 @@ export const useLocaleStore = defineStore('localeStore', {
     fallback: { title: 'English', value: 'en', name: 'united-states' }
   }),
   getters: {},
+  persist: {
+    include: ['selected']
+  },
   actions: {
     getLocale() {
       const { locale } = useI18n()
