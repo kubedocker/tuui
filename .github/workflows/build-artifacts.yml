@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    name: Generate build artifacts on ${{ matrix.os }}
+    name: Build ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -33,8 +33,8 @@ jobs:
         with:
           name: build-artifacts-${{ matrix.os }}
           path: |
-            release/**/*.{exe,appx,zip}  // win
-            release/**/*.{deb,rpm,snap}  // linux
-            release/**/*.{dmg}           // mac
+            release/**/*.{exe,appx,zip}
+            release/**/*.{deb,rpm,snap}
+            release/**/*.{dmg}
           retention-days: 2
           compression-level: 0
