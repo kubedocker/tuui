@@ -20,7 +20,7 @@ jobs:                                          # 作业
         run: npm install                       # 安装项目依赖
 
       - name: Build project
-        run: npm run build:linux -p always                  # 构建项目
+        run: npm run build:linux            # 构建项目
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
