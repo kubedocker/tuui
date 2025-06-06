@@ -23,6 +23,7 @@ jobs:                                          # 作业
       - name: Build project
         run: npm run build:linux            # 构建项目
         env:
+          GITHUB_TOKEN: ${{ secrets.GH_WRITE_TOKEN }}
           GH_TOKEN: ${{ secrets.GH_WRITE_TOKEN }}
 
       - name: Archive production artifacts
