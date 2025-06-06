@@ -29,7 +29,7 @@
     "build:all": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js -wml",
     "build:dir": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --dir",
     "build:mac": "npm run build:pre && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --config=buildAssets/builder/config.js --mac",
-    "build:linux": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --linux",
+    "build:linux": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --linux --publish always",
     "build:win": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --windows",
     "lint": "eslint --ext .js,.ts,.vue -f stylish src",
     "lint:fix": "eslint --ext .js,.ts,.vue -f stylish --fix src",
