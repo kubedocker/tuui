@@ -10,10 +10,10 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/AI-QL/tuui.git"
+    "url": "https://github.com/kubedocker/tuui.git"
   },
   "bugs": {
-    "url": "https://github.com/AI-QL/tuui/issues"
+    "url": "https://github.com/kubedocker/tuui/issues"
   },
   "debug": {
     "env": {
